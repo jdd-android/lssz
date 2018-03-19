@@ -35,7 +35,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support.constraint:constraint-layout:+'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //compile(name:'core-4.1.0-openDefaultRelease', ext:'aar')
     compile 'com.sina.weibo.sdk:core:4.1.0:openDefaultRelease@aar'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
 }

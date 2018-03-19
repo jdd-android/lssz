@@ -17,6 +17,10 @@ import com.sina.weibo.sdk.auth.WbAuthListener;
 import com.sina.weibo.sdk.auth.WbConnectErrorMessage;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
@@ -106,27 +110,26 @@ public class WBDemoMainActivity extends Activity {
         new Thread() {
             @Override
             public void run() {
-
-
                 try {
                     final Response response = client.newCall(request).execute();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                tvShowUser.setText(response.body().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    String responseData = response.body().string();
+                    parseJSONWithJSONObject(responseData);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
             }
         }.start();
+    }
+
+    private void parseJSONWithJSONObject(String jsonData) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonData);
+            JSONObject statusObject = jsonObject.getJSONObject("status");
+            String text = statusObject.getString("text");
+            Log.i("TAG", text);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }
