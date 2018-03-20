@@ -2,16 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        config {
-            keyAlias 'weibo'
+        release {
+            keyAlias 'lssz'
             keyPassword '000000'
-            storeFile file('C:/Users/Administrator/AndroidStudioProjects/lssz1/13.jks')
+            storeFile file("$rootDir/13.jks")
             storePassword '000000'
         }
     }
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.administrator.lssz"
+        applicationId "com.example.lssz"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
@@ -21,7 +21,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }

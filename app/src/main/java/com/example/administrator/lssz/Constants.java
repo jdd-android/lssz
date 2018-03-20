@@ -5,7 +5,7 @@ package com.example.administrator.lssz;
  */
 
 public class Constants {
-    public static final String APP_KEY      = "108415581";
+    public static final String APP_KEY      = "1860762016";
 
     /**
      * 当前 DEMO 应用的回调页，第三方应用可以使用自己的回调页。
