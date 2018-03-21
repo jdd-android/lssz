@@ -7,6 +7,7 @@ android {
             keyPassword '000000'
             storeFile file("$rootDir/13.jks")
             storePassword '000000'
+            // test
         }
     }
     compileSdkVersion 26
