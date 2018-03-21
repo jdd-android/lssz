@@ -41,8 +41,6 @@ public class WBDemoMainActivity extends Activity {
         tvShowToken = (TextView) findViewById(R.id.tv_show_token);
         tvShowUser = (TextView) findViewById(R.id.tv_show_userMessage);
 
-
-
         WbSdk.install(getApplicationContext(), new AuthInfo(getApplicationContext(), Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE));
 
         mSsoHandler = new SsoHandler(this);
