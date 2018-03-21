@@ -1,7 +1,7 @@
 package com.example.administrator.lssz.ui;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -95,7 +95,7 @@ public class PublicTimelineActivity extends Activity {
                     statusesAdapter.setContext(PublicTimelineActivity.this);
                     statusesRecyclerView = (RecyclerView) findViewById(R.id.statuses_list);
                     statusesRecyclerView.setAdapter(statusesAdapter);
-                    statusesRecyclerView.setLayoutManager(new LinearLayoutManager(PublicTimelineActivity.this, LinearLayoutManager.VERTICAL, true));
+                    statusesRecyclerView.setLayoutManager(new LinearLayoutManager(PublicTimelineActivity.this, LinearLayoutManager.VERTICAL, false));
                 }
             });
         } catch (JSONException e) {

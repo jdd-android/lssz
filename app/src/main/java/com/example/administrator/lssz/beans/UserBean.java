@@ -1,9 +1,7 @@
 package com.example.administrator.lssz.beans;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 
-import com.example.administrator.lssz.BR;
+
 
 /**
  * Created by Administrator on 2018/3/20.

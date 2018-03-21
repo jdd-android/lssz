@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.lssz.ui.PublicTimelineActivity;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -119,6 +120,12 @@ public class WBDemoMainActivity extends Activity {
         }.start();
     }
 
+    public void getPublicMessages(View view){
+        Intent intent=new Intent(WBDemoMainActivity.this,PublicTimelineActivity.class);
+        startActivity(intent);
+
+    }
+
     private void parseJSONWithJSONObject(String jsonData) {
         try {
             JSONObject jsonObject = new JSONObject(jsonData);
@@ -141,28 +148,7 @@ public class WBDemoMainActivity extends Activity {
         }
     }
 
-    //    @Override
-//    public void onResume() {
-//        super.onResume();
-//        //统计应用启动时间
-//        WBAgent.onPageStart("WBDemoMainActivity");
-//        WBAgent.onResume(this);
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        //统计页面退出
-//        WBAgent.onPageEnd("WBDemoMainActivity");
-//        WBAgent.onPause(this);
-//    }
-//
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        //退出应用时关闭统计进程
-//        WBAgent.onKillProcess();
-//    }
+
 
 
 }
