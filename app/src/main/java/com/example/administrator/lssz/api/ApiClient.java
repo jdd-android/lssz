@@ -41,7 +41,7 @@ public class ApiClient {
      * @param accessToken 授权令牌
      */
     public void requestPublicLine(String accessToken, final Callback<List<StatusBean>, IError> callback) {
-        String url = BASE_API_URL + "/statuses/public_timeline.json?access_token="+accessToken;
+        String url = BASE_API_URL + "/statuses/public_timeline.json?access_token=" + accessToken;
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -80,13 +80,12 @@ public class ApiClient {
      * 请求用户信息
      *
      * @param accessToken
-     *
-     * @param  uid
-     * */
+     * @param uid
+     */
 
-    public void requestUsersShow(String accessToken, String uid, final Callback<UserBean,IError>callback){
-        String url=BASE_API_URL+"/users/show.json?access_token="+accessToken+"&uid="+uid;
-        final Request request=new Request.Builder()
+    public void requestUsersShow(String accessToken, String uid, final Callback<UserBean, IError> callback) {
+        String url = BASE_API_URL + "/users/show.json?access_token=" + accessToken + "&uid=" + uid;
+        final Request request = new Request.Builder()
                 .url(url)
                 .get()
                 .build();
@@ -94,20 +93,18 @@ public class ApiClient {
         sClient.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                callback.failure(new Error(-1,e.getMessage()));
-                Log.i("Request","Fail");
+                callback.failure(new Error(-1, e.getMessage()));
+                Log.i("Request", "Fail");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if(response.isSuccessful()){
-                    UserBean user=JSONObject.parseObject(response.body().string(),UserBean.class);
+                if (response.isSuccessful()) {
+                    UserBean user = JSONObject.parseObject(response.body().string(), UserBean.class);
                     callback.success(user);
-                }else{
-                    Log.i("Response","error");
+                } else {
+                    Log.i("Response", "error");
                 }
-
-
             }
         });
     }
