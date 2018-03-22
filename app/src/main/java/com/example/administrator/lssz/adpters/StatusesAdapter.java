@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
-import com.example.administrator.lssz.utils.CircleCrop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.Status
     public void onBindViewHolder(StatusViewHolder holder, int position) {
         StatusBean statusBean = mStatusesList.get(position);
         Glide.with(context).load(statusBean.getUser().getProfileImageUrl())
-                .transform(new CircleCrop(context))
+                .apply(RequestOptions.circleCropTransform())
                 // FIXME 传递 width height 时想一下应该传递的是 px 还是 dp，没发现头像模糊么
                 .into(holder.statusIamge);
         holder.statusName.setText(statusBean.getUser().getName());

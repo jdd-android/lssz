@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="getPublicMessages"
-        android:text="getPublic"/>
-
+        android:text="getPublic" />
 
 
 </LinearLayout>

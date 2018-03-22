@@ -3,17 +3,18 @@ package com.example.administrator.lssz.ui;
 import android.app.Activity;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.adpters.StatusesAdapter;
 import com.example.administrator.lssz.api.ApiClient;
@@ -21,17 +22,11 @@ import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.beans.UserBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
-import com.example.administrator.lssz.utils.CircleCrop;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class PublicTimelineActivity extends Activity {
 
@@ -56,8 +51,8 @@ public class PublicTimelineActivity extends Activity {
 
         statusesAdapter = new StatusesAdapter(this);
         statusesRecyclerView = (RecyclerView) findViewById(R.id.statuses_list);
-        statusesRecyclerView.setAdapter(statusesAdapter);
         statusesRecyclerView.setLayoutManager(new LinearLayoutManager(PublicTimelineActivity.this, LinearLayoutManager.VERTICAL, false));
+        statusesRecyclerView.setAdapter(statusesAdapter);
 
         // 请求 publicLine 数据并显示
         requestPublicLineData();
@@ -98,7 +93,7 @@ public class PublicTimelineActivity extends Activity {
                     public void run() {
                         Glide.with(PublicTimelineActivity.this)
                                 .load(data.getProfileImageUrl())
-                                .transform(new CircleCrop(PublicTimelineActivity.this))
+                                .apply(RequestOptions.circleCropTransform())
                                 .into(ivUserIamge);
                         tvUserName.setText(data.getName());
                     }
