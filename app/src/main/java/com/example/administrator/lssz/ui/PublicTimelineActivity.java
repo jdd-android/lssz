@@ -56,7 +56,6 @@ public class PublicTimelineActivity extends Activity {
 
         // 请求 publicLine 数据并显示
         requestPublicLineData();
-
         requestUserData();
 
     }
