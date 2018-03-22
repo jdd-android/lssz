@@ -16,15 +16,16 @@
         android:onClick="getUserMessages"
         android:text="getMessages" />
 
-    <ScrollView
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="getPublicMessages"
+        android:text="getPublic"/>
 
-        <TextView
-            android:id="@+id/tv_show_userMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_show_userMessage"/>
 
 
 </LinearLayout>
