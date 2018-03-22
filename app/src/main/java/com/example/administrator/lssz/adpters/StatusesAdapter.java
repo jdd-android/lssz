@@ -36,13 +36,13 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.Status
     @Override
     public void onBindViewHolder(StatusViewHolder holder, int position) {
         StatusBean statusBean = mStatusesList.get(position);
-        Glide.with(context).load(statusBean.getProfile_image_url())
+        Glide.with(context).load(statusBean.getUser().getProfileImageUrl())
                 .transform(new CircleCrop(context))
                 // FIXME 传递 width height 时想一下应该传递的是 px 还是 dp，没发现头像模糊么
-                .override(50,50)
+                //override 传递px
                 .into(holder.statusIamge);
-        holder.statusName.setText(statusBean.getName());
-        holder.statusTime.setText(statusBean.getCreated_at());
+        holder.statusName.setText(statusBean.getUser().getName());
+        holder.statusTime.setText(statusBean.getCreatedAt());
         holder.statusText.setText(statusBean.getText());
     }
 

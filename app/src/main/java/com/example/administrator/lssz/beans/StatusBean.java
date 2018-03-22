@@ -5,38 +5,28 @@ package com.example.administrator.lssz.beans;
  */
 
 public class StatusBean {
-    private String created_at;
+    private String createdAt;
     private String text;
     private String source;
     private String geo;
-    private int reposts_count;
-    private int commments_count;
-    private String name;
-    private String profile_image_url;
+    private int repostsCount;
+    private int commmentsCount;
+    private UserBean user;
 
-
-    public void setProfile_image_url(String profile_image_url) {
-        this.profile_image_url = profile_image_url;
+    public UserBean getUser() {
+        return user;
     }
 
-    public String getProfile_image_url() {
-        return profile_image_url;
+    public void setUser(UserBean user) {
+        this.user = user;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getText() {
@@ -63,20 +53,20 @@ public class StatusBean {
         this.geo = geo;
     }
 
-    public int getCommments_count() {
-        return commments_count;
+    public int getCommmentsCount() {
+        return commmentsCount;
     }
 
-    public void setCommments_count(int commments_count) {
-        this.commments_count = commments_count;
+    public void setCommmentsCount(int commmentsCount) {
+        this.commmentsCount = commmentsCount;
     }
 
-    public int getReposts_count() {
-        return reposts_count;
+    public int getRepostsCount() {
+        return repostsCount;
     }
 
-    public void setReposts_count(int reposts_count) {
-        this.reposts_count = reposts_count;
+    public void setRepostsCount(int repostsCount) {
+        this.repostsCount = repostsCount;
     }
 
 }

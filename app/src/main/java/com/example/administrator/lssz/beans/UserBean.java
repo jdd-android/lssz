@@ -9,13 +9,13 @@ package com.example.administrator.lssz.beans;
 
 public class UserBean {
     private String name;
-    private String profile_image_url;
+    private String profileImageUrl;
     private String location;
     private String description;
-    private int followers_count;
-    private int friends_count;
-    private int statuses_count;
-    private String created_at;
+    private int followersCount;
+    private int friendsCount;
+    private int statusesCount;
+    private String createdAt;
 
     public String getName() {
         return name;
@@ -25,12 +25,12 @@ public class UserBean {
         this.name = name;
     }
 
-    public String getProfile_image_url() {
-        return profile_image_url;
+    public String getProfileImageUrl() {
+        return profileImageUrl;
     }
 
-    public void setProfile_image_url(String profile_image_url) {
-        this.profile_image_url = profile_image_url;
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public String getLocation() {
@@ -49,35 +49,35 @@ public class UserBean {
         this.description = description;
     }
 
-    public int getFollowers_count() {
-        return followers_count;
+    public int getFollowersCount() {
+        return followersCount;
     }
 
-    public void setFollowers_count(int followers_count) {
-        this.followers_count = followers_count;
+    public void setFollowersCount(int followersCount) {
+        this.followersCount = followersCount;
     }
 
-    public int getFriends_count() {
-        return friends_count;
+    public int getFriendsCount() {
+        return friendsCount;
     }
 
-    public void setFriends_count(int friends_count) {
-        this.friends_count = friends_count;
+    public void setFriendsCount(int friendsCount) {
+        this.friendsCount = friendsCount;
     }
 
-    public int getStatuses_count() {
-        return statuses_count;
+    public int getStatusesCount() {
+        return statusesCount;
     }
 
-    public void setStatuses_count(int statuses_count) {
-        this.statuses_count = statuses_count;
+    public void setStatusesCount(int statusesCount) {
+        this.statusesCount = statusesCount;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }
