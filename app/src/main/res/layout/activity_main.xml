@@ -10,22 +10,11 @@
         android:layout_height="wrap_content" />
 
     <Button
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="getUserMessages"
-        android:text="getMessages" />
-
-    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="getPublicMessages"
         android:text="getPublic"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_show_userMessage"/>
 
 
 </LinearLayout>

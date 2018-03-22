@@ -59,6 +59,7 @@ public class ApiClient {
                     // TODO 解析数据 -> List<StatusBean>，通过 callback.success() 回调
                     List<StatusBean> statuses = new ArrayList<>();
                     String data = response.body().string();
+                    Log.i("Response", data);
                     JSONObject jsonObject = JSONObject.parseObject(data);
                     JSONArray jsonArray = jsonObject.getJSONArray("statuses");
                     for (int i = 0; i < jsonArray.size(); i++) {

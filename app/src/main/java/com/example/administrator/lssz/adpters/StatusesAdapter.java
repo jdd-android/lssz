@@ -27,11 +27,12 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.Status
     public void setStatusesList(final List<StatusBean> statusesList) {
         mStatusesList = statusesList;
     }
-
     // TODO 不会变的成员属性，在构造函数里传，保证本类中任何时候获取都不会是null
-    public void setContext(final Context context) {
-        this.context = context;
+    public StatusesAdapter(Context context){
+        this.context=context;
     }
+
+
 
     @Override
     public void onBindViewHolder(StatusViewHolder holder, int position) {
@@ -39,7 +40,6 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.Status
         Glide.with(context).load(statusBean.getUser().getProfileImageUrl())
                 .transform(new CircleCrop(context))
                 // FIXME 传递 width height 时想一下应该传递的是 px 还是 dp，没发现头像模糊么
-                //override 传递px
                 .into(holder.statusIamge);
         holder.statusName.setText(statusBean.getUser().getName());
         holder.statusTime.setText(statusBean.getCreatedAt());

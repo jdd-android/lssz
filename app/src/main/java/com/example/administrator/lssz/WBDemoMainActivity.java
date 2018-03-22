@@ -32,7 +32,6 @@ public class WBDemoMainActivity extends Activity {
 
     private static Oauth2AccessToken mAccessToken;
     private TextView tvShowToken;
-    private TextView tvShowUser;
     private SsoHandler mSsoHandler;
 
     @Override
@@ -40,7 +39,7 @@ public class WBDemoMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tvShowToken = (TextView) findViewById(R.id.tv_show_token);
-        tvShowUser = (TextView) findViewById(R.id.tv_show_userMessage);
+
 
         WbSdk.install(getApplicationContext(), new AuthInfo(getApplicationContext(), Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE));
 
@@ -103,42 +102,12 @@ public class WBDemoMainActivity extends Activity {
 
     }
 
-    public void getUserMessages(View view) {
-        final OkHttpClient client = new OkHttpClient();
-        final Request request = new Request.Builder().get().url("https://api.weibo.com/2/users/show.json?access_token=" + mAccessToken.getToken() + "&uid=" + mAccessToken.getUid()).build();
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    final Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    parseJSONWithJSONObject(responseData);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-    }
 
     public void getPublicMessages(View view){
         Intent intent=new Intent(WBDemoMainActivity.this,PublicTimelineActivity.class);
         startActivity(intent);
 
     }
-
-    private void parseJSONWithJSONObject(String jsonData) {
-        try {
-            JSONObject jsonObject = new JSONObject(jsonData);
-            JSONObject statusObject = jsonObject.getJSONObject("status");
-            String text = statusObject.getString("text");
-            Log.i("TAG", text);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
