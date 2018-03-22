@@ -97,8 +97,6 @@ public class PublicTimelineActivity extends Activity {
                         tvUserName.setText(data.getName());
                     }
                 });
-
-
             }
 
             @Override
