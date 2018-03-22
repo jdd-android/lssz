@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
-import com.example.administrator.lssz.ui.PublicTimelineActivity;
 import com.example.administrator.lssz.utils.CircleCrop;
 
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.Status
         mStatusesList = statusesList;
     }
 
+    // TODO 不会变的成员属性，在构造函数里传，保证本类中任何时候获取都不会是null
     public void setContext(final Context context) {
         this.context = context;
     }
@@ -38,6 +38,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.Status
         StatusBean statusBean = mStatusesList.get(position);
         Glide.with(context).load(statusBean.getProfile_image_url())
                 .transform(new CircleCrop(context))
+                // FIXME 传递 width height 时想一下应该传递的是 px 还是 dp，没发现头像模糊么
                 .override(50,50)
                 .into(holder.statusIamge);
         holder.statusName.setText(statusBean.getName());
