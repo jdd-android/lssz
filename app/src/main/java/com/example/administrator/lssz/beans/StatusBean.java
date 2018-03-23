@@ -5,12 +5,14 @@ package com.example.administrator.lssz.beans;
  */
 
 public class StatusBean {
+    private int repostsCount;
+    private int commmentsCount;
+
     private String createdAt;
     private String text;
     private String source;
     private String geo;
-    private int repostsCount;
-    private int commmentsCount;
+
     private UserBean user;
 
     public UserBean getUser() {

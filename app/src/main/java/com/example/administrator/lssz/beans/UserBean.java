@@ -8,13 +8,15 @@ package com.example.administrator.lssz.beans;
  */
 
 public class UserBean {
-    private String name;
-    private String profileImageUrl;
-    private String location;
-    private String description;
     private int followersCount;
     private int friendsCount;
     private int statusesCount;
+
+    private String name;
+    private String avatarLarge;
+    private String profileImageUrl;
+    private String location;
+    private String description;
     private String createdAt;
 
     public String getName() {
@@ -31,6 +33,14 @@ public class UserBean {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getAvatarLarge() {
+        return avatarLarge;
+    }
+
+    public void setAvatarLarge(String avatarLarge) {
+        this.avatarLarge = avatarLarge;
     }
 
     public String getLocation() {

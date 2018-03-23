@@ -1,17 +1,13 @@
 package com.example.administrator.lssz.ui;
 
 import android.app.Activity;
-
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -25,7 +21,6 @@ import com.example.administrator.lssz.common.IError;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PublicTimelineActivity extends Activity {
@@ -34,7 +29,6 @@ public class PublicTimelineActivity extends Activity {
     private RecyclerView statusesRecyclerView;
     private ImageView ivUserIamge;
     private TextView tvUserName;
-    private List<StatusBean> statuses = new ArrayList<>();
     private static Oauth2AccessToken mAccessToken;
 
     @Override
@@ -57,14 +51,12 @@ public class PublicTimelineActivity extends Activity {
         // 请求 publicLine 数据并显示
         requestPublicLineData();
         requestUserData();
-
     }
 
     private void requestPublicLineData() {
         new ApiClient().requestPublicLine(mAccessToken.getToken(), new Callback<List<StatusBean>, IError>() {
             @Override
             public void success(List<StatusBean> data) {
-                // TODO refresh ui
                 statusesAdapter.setStatusesList(data);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -77,7 +69,6 @@ public class PublicTimelineActivity extends Activity {
 
             @Override
             public void failure(IError error) {
-                // TODO show error
                 Log.i("Callback Error", "Callback Error");
             }
         });
@@ -91,7 +82,7 @@ public class PublicTimelineActivity extends Activity {
                     @Override
                     public void run() {
                         Glide.with(PublicTimelineActivity.this)
-                                .load(data.getProfileImageUrl())
+                                .load(data.getAvatarLarge())
                                 .apply(RequestOptions.circleCropTransform())
                                 .into(ivUserIamge);
                         tvUserName.setText(data.getName());
@@ -102,7 +93,6 @@ public class PublicTimelineActivity extends Activity {
             @Override
             public void failure(IError error) {
                 Log.i("Callback Error", "Callback Error");
-
             }
         });
     }

@@ -21,25 +21,19 @@ import java.util.List;
  */
 
 public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.StatusViewHolder> {
-    List<StatusBean> mStatusesList = new ArrayList<>();
+
+    private List<StatusBean> mStatusesList = new ArrayList<>();
     private Context context;
 
-    public void setStatusesList(final List<StatusBean> statusesList) {
-        mStatusesList = statusesList;
+    public StatusesAdapter(Context context) {
+        this.context = context;
     }
-    // TODO 不会变的成员属性，在构造函数里传，保证本类中任何时候获取都不会是null
-    public StatusesAdapter(Context context){
-        this.context=context;
-    }
-
-
 
     @Override
     public void onBindViewHolder(StatusViewHolder holder, int position) {
         StatusBean statusBean = mStatusesList.get(position);
-        Glide.with(context).load(statusBean.getUser().getProfileImageUrl())
+        Glide.with(context).load(statusBean.getUser().getAvatarLarge())
                 .apply(RequestOptions.circleCropTransform())
-                // FIXME 传递 width height 时想一下应该传递的是 px 还是 dp，没发现头像模糊么
                 .into(holder.statusIamge);
         holder.statusName.setText(statusBean.getUser().getName());
         holder.statusTime.setText(statusBean.getCreatedAt());
@@ -58,13 +52,17 @@ public class StatusesAdapter extends RecyclerView.Adapter<StatusesAdapter.Status
         return holder;
     }
 
+    public void setStatusesList(final List<StatusBean> statusesList) {
+        mStatusesList = statusesList;
+    }
+
     static class StatusViewHolder extends RecyclerView.ViewHolder {
         ImageView statusIamge;
         TextView statusName;
         TextView statusTime;
         TextView statusText;
 
-        public StatusViewHolder(View view) {
+        StatusViewHolder(View view) {
             super(view);
             statusIamge = view.findViewById(R.id.iv_status_image);
             statusName = view.findViewById(R.id.tv_status_name);
