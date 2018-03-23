@@ -40,11 +40,7 @@ public class WBDemoMainActivity extends Activity {
         setContentView(R.layout.activity_main);
         tvShowToken = (TextView) findViewById(R.id.tv_show_token);
 
-
-        WbSdk.install(getApplicationContext(), new AuthInfo(getApplicationContext(), Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE));
-
         mSsoHandler = new SsoHandler(this);
-
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
         if (mAccessToken.isSessionValid()) {
             updateTokenView(true);
