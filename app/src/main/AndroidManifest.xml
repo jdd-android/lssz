@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.PublicTimelineActivity"></activity>
+        <activity android:name=".ui.PublicTimelineActivity" />
+        <activity android:name=".ui.StatusCommentActivity"></activity>
     </application>
 
 </manifest>

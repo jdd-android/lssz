@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.administrator.lssz.beans.CommentBean;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.beans.UserBean;
 import com.example.administrator.lssz.common.Callback;
@@ -28,7 +29,7 @@ public class ApiClient {
 
     private static final OkHttpClient sClient;
 
-    private static final String BASE_API_URL = "https://api.weibo.com/2";
+    private static final String BASE_API_URL = "https://api.weibo.com/2/";
 
     static {
         // 设置一个全局的 OkHttpClient 可以复用连接池，减少资源占用
@@ -41,7 +42,7 @@ public class ApiClient {
      * @param accessToken 授权令牌
      */
     public void requestPublicLine(String accessToken, final Callback<List<StatusBean>, IError> callback) {
-        String url = BASE_API_URL + "/statuses/public_timeline.json?access_token=" + accessToken;
+        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken;
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -80,12 +81,12 @@ public class ApiClient {
     /**
      * 请求用户信息
      *
-     * @param accessToken
-     * @param uid
+     * @param accessToken 授权令牌
+     * @param uid         用户id
      */
 
     public void requestUsersShow(String accessToken, String uid, final Callback<UserBean, IError> callback) {
-        String url = BASE_API_URL + "/users/show.json?access_token=" + accessToken + "&uid=" + uid;
+        String url = BASE_API_URL + "users/show.json?access_token=" + accessToken + "&uid=" + uid;
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -106,6 +107,78 @@ public class ApiClient {
                 } else {
                     Log.i("Response", "error");
                 }
+            }
+        });
+    }
+
+    /**
+     * 请求评论列表
+     *
+     * @param accessToken 授权令牌
+     * @param id          微博id
+     */
+    public void requestStatusComment(String accessToken, String id, final Callback<List<CommentBean>, IError> callBack) {
+        String url = BASE_API_URL + "comments/show.json?access_token=" + accessToken + "&id=" + id;
+        final Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        sClient.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callBack.failure(new Error(-1, e.getMessage()));
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String data = response.body().string();
+                    Log.i("Response", data);
+                    List<CommentBean> comments = new ArrayList<>();
+                    JSONArray jsonArray = JSONObject.parseObject(data).getJSONArray("comments");
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        CommentBean comment = JSONObject.parseObject(jsonArray.get(i).toString(), CommentBean.class);
+                        comments.add(comment);
+                    }
+                    callBack.success(comments);
+                } else {
+                    Log.i("Response", "Response Fail");
+                }
+            }
+        });
+
+
+    }
+
+    /**
+     * 获取单条微博内容
+     *
+     * @param accessToken 授权令牌
+     * @param id          微博id
+     */
+    public void requestSingleStatus(String accessToken, String id, final Callback<StatusBean, IError> callback) {
+        String url = BASE_API_URL + "statuses/show.json?access_token=" + accessToken + "&id=" + id;
+        final Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        sClient.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.failure(new Error(-1, e.getMessage()));
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String data = response.body().string();
+                    Log.i("Response", data);
+                    StatusBean statusBean = JSONObject.parseObject(data, StatusBean.class);
+                    callback.success(statusBean);
+                }
+
             }
         });
     }

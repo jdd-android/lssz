@@ -1,13 +1,17 @@
 package com.example.administrator.lssz.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -24,8 +28,11 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import java.util.List;
 
 public class PublicTimelineActivity extends Activity {
+    private final static String STATUS_ID = "id";
 
     private StatusesAdapter statusesAdapter;
+    private SwipeRefreshLayout mRefrshLayout;
+    private SwipeRefreshLayout.OnRefreshListener mRefreshListener;
     private RecyclerView statusesRecyclerView;
     private ImageView ivUserIamge;
     private TextView tvUserName;
@@ -36,19 +43,41 @@ public class PublicTimelineActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_public_timeline);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //读取令牌
+        mAccessToken = AccessTokenKeeper.readAccessToken(this);
 
+        //初始化顶端栏
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ivUserIamge = (ImageView) findViewById(R.id.iv_user_image);
         tvUserName = (TextView) findViewById(R.id.tv_user_name);
 
-        mAccessToken = AccessTokenKeeper.readAccessToken(this);
-
+        //初始化公共微博的RecyclerView
+        mRefrshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_swipe_refresh);
+        mRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestPublicLineData();
+                mRefrshLayout.setRefreshing(false);
+            }
+        };
+        mRefrshLayout.setOnRefreshListener(mRefreshListener);
         statusesAdapter = new StatusesAdapter(this);
+        statusesAdapter.setOnRecyclerViewListener(new StatusesAdapter.OnRecyclerViewListener() {
+            @Override
+            public void onItemClick(View view, StatusBean statusBean) {
+                //跳转评论页面
+                Intent intent = new Intent(PublicTimelineActivity.this, StatusCommentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(STATUS_ID, statusBean.getId());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         statusesRecyclerView = (RecyclerView) findViewById(R.id.statuses_list);
         statusesRecyclerView.setLayoutManager(new LinearLayoutManager(PublicTimelineActivity.this, LinearLayoutManager.VERTICAL, false));
         statusesRecyclerView.setAdapter(statusesAdapter);
 
-        // 请求 publicLine 数据并显示
+        // 请求数据并显示
         requestPublicLineData();
         requestUserData();
     }
@@ -57,14 +86,8 @@ public class PublicTimelineActivity extends Activity {
         new ApiClient().requestPublicLine(mAccessToken.getToken(), new Callback<List<StatusBean>, IError>() {
             @Override
             public void success(List<StatusBean> data) {
-                statusesAdapter.setStatusesList(data);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        statusesAdapter.notifyDataSetChanged();
-                        Log.i("Callback Success", "Callback Success");
-                    }
-                });
+                loadPublicLine(data);
+                Log.i("Callback Success", "Callback Success");
             }
 
             @Override
@@ -74,25 +97,39 @@ public class PublicTimelineActivity extends Activity {
         });
     }
 
+    private void loadPublicLine(List<StatusBean> data) {
+        statusesAdapter.setStatusesList(data);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                statusesAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
     private void requestUserData() {
         new ApiClient().requestUsersShow(mAccessToken.getToken(), mAccessToken.getUid(), new Callback<UserBean, IError>() {
             @Override
-            public void success(final UserBean data) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Glide.with(PublicTimelineActivity.this)
-                                .load(data.getAvatarLarge())
-                                .apply(RequestOptions.circleCropTransform())
-                                .into(ivUserIamge);
-                        tvUserName.setText(data.getName());
-                    }
-                });
+            public void success(UserBean data) {
+                loadToolbar(data);
             }
 
             @Override
             public void failure(IError error) {
                 Log.i("Callback Error", "Callback Error");
+            }
+        });
+    }
+
+    private void loadToolbar(final UserBean data) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Glide.with(PublicTimelineActivity.this)
+                        .load(data.getAvatarLarge())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(ivUserIamge);
+                tvUserName.setText(data.getName());
             }
         });
     }

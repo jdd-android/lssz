@@ -7,13 +7,20 @@ package com.example.administrator.lssz.beans;
 public class StatusBean {
     private int repostsCount;
     private int commmentsCount;
-
+    private String id;
     private String createdAt;
     private String text;
     private String source;
     private String geo;
-
     private UserBean user;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public UserBean getUser() {
         return user;
