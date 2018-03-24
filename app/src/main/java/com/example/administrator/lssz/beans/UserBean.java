@@ -1,22 +1,31 @@
 package com.example.administrator.lssz.beans;
 
 
-
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * Created by Administrator on 2018/3/20.
  */
 
 public class UserBean {
+    @JSONField(name = "followers_count")
     private int followersCount;
+    @JSONField(name = "friends_count")
     private int friendsCount;
+    @JSONField(name = "statuses_count")
     private int statusesCount;
 
+    @JSONField(name = "name")
     private String name;
+    @JSONField(name = "avatar_large")
     private String avatarLarge;
+    @JSONField(name = "profile_image_url")
     private String profileImageUrl;
+    @JSONField(name = "location")
     private String location;
+    @JSONField(name = "description")
     private String description;
+    @JSONField(name = "create_at")
     private String createdAt;
 
     public String getName() {

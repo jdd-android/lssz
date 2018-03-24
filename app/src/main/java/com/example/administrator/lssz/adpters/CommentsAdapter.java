@@ -63,7 +63,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             super(itemView);
             ivCommentUserIamge = (ImageView) itemView.findViewById(R.id.iv_comment_user_image);
             tvCommentUserName = (TextView) itemView.findViewById(R.id.tv_comment_name);
-            tvCommentUserText = (TextView) itemView.findViewById(R.id.tv_status_text);
+            tvCommentUserText = (TextView) itemView.findViewById(R.id.tv_comment_text);
             tvCommentUserTime = (TextView) itemView.findViewById(R.id.tv_comment_time);
 
 

@@ -1,15 +1,23 @@
 package com.example.administrator.lssz.beans;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * Created by Administrator on 2018/3/23.
  */
 
 public class CommentBean {
+    @JSONField(name = "create_at")
     private String createdAt;
+    @JSONField(name = "mid")
     private String mid;
+    @JSONField(name = "text")
     private String text;
+    @JSONField(name = "source")
     private String source;
+    @JSONField(name = "user")
     private UserBean userBean;
+    @JSONField(name = "status")
     private StatusBean statusBean;
 
     public UserBean getUserBean() {

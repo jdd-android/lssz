@@ -1,5 +1,6 @@
 package com.example.administrator.lssz.api;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
@@ -14,8 +15,10 @@ import com.example.administrator.lssz.common.IError;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.Call;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -33,7 +36,7 @@ public class ApiClient {
 
     static {
         // 设置一个全局的 OkHttpClient 可以复用连接池，减少资源占用
-        sClient = new OkHttpClient();
+        sClient = new OkHttpClient.Builder().addInterceptor(new LoggingInterceptor()).build();
     }
 
     /**
@@ -181,5 +184,31 @@ public class ApiClient {
 
             }
         });
+    }
+
+    static class LoggingInterceptor implements Interceptor {
+        @Override
+        public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
+            Request request = chain.request();
+            Log.i("OkHttp", "request:" + request.toString());
+            long t1 = System.nanoTime();
+            okhttp3.Response response = chain.proceed(chain.request());
+            long t2 = System.nanoTime();
+            Log.i("OkHttp", String.format(Locale.getDefault(), "Received response for %s in %.1fms%n%s",
+                    response.request().url(), (t2 - t1) / 1e6d, response.headers()));
+            okhttp3.MediaType mediaType = response.body().contentType();
+            String content = response.body().string();
+            if (!TextUtils.isEmpty(content) && content.length() > 2000) {
+                for (int i = 0; i < content.length(); i += 2000) {
+                    Log.i("OkHttp", "response body:" + content.substring(i, i + 2000 > content.length() ? content.length() : (i + 2000)));
+                }
+            } else {
+                Log.i("OkHttp", "response body:" + content);
+            }
+
+            return response.newBuilder()
+                    .body(okhttp3.ResponseBody.create(mediaType, content))
+                    .build();
+        }
     }
 }
