@@ -98,9 +98,13 @@ public class StatusCommentActivity extends Activity {
         new ApiClient().requestStatusComment(mAccessToken.getToken(), statusId, new Callback<List<CommentBean>, IError>() {
             @Override
             public void success(List<CommentBean> data) {
-                Log.i("Callback Success", "StatusCommentCallback Success");
-                if (data == null) {
-                    Toast.makeText(StatusCommentActivity.this, "评论不可见或暂无评论!", Toast.LENGTH_LONG).show();
+                if (data.isEmpty()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(StatusCommentActivity.this, "评论不可见或暂无评论!", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 } else {
                     commentAdapter.setComments(data);
                     runOnUiThread(new Runnable() {

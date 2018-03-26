@@ -47,7 +47,7 @@ public class ApiClient {
      */
 
     public void requestPublicLine(String accessToken, int page, final Callback<List<StatusBean>, IError> callback) {
-        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken + "&page=" + page + "&count=7";
+        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken + "&page=" + page;
         final Request request = new Request.Builder()
                 .url(url)
                 .get()

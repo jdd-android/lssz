@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
@@ -33,6 +34,7 @@ import java.util.List;
 public class PublicTimelineActivity extends Activity {
     private final static String STATUS_ID = "id";
     private final static String STATUS = "status";
+    private final int PAGE_NUMBER = 6;
     private int page = 1;
 
     private StatusesAdapter statusesAdapter;
@@ -42,7 +44,8 @@ public class PublicTimelineActivity extends Activity {
     private ImageView ivUserIamge;
     private TextView tvUserName;
     private static Oauth2AccessToken mAccessToken;
-    private List<StatusBean> statuses = new ArrayList<>();
+    private List<StatusBean> totalStatuses = new ArrayList<>();
+    private List<StatusBean> pageStatuses = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +95,11 @@ public class PublicTimelineActivity extends Activity {
             @Override
             public void onLoadMore() {
                 statusesAdapter.setLoadState(statusesAdapter.LOADING);
-                page = page + 1;
-                requestPublicLineData();
+                if (pageStatuses.size() < totalStatuses.size()) {
+                    loadPublicLine(getPageStatuses());
+                } else {
+                    statusesAdapter.setLoadState(statusesAdapter.LOADING_END);
+                }
             }
         });
 
@@ -106,8 +112,10 @@ public class PublicTimelineActivity extends Activity {
         new ApiClient().requestPublicLine(mAccessToken.getToken(), page, new Callback<List<StatusBean>, IError>() {
             @Override
             public void success(List<StatusBean> data) {
-                loadPublicLine(data);
-                Log.i("Callback Success", "Callback Success");
+                if (!data.isEmpty()) {
+                    totalStatuses = data;
+                    loadPublicLine(getPageStatuses());
+                }
             }
 
             @Override
@@ -117,10 +125,22 @@ public class PublicTimelineActivity extends Activity {
         });
     }
 
+    private List<StatusBean> getPageStatuses() {
+        if (totalStatuses.size() < pageStatuses.size() + PAGE_NUMBER) {
+            for (int i = (page - 1) * PAGE_NUMBER; i < totalStatuses.size(); i++) {
+                pageStatuses.add(totalStatuses.get(i));
+            }
+        } else {
+            for (int i = (page - 1) * PAGE_NUMBER; i < page * PAGE_NUMBER; i++) {
+                pageStatuses.add(totalStatuses.get(i));
+            }
+            page++;
+        }
+        return pageStatuses;
+    }
+
     private void loadPublicLine(List<StatusBean> data) {
-        statuses = statusesAdapter.getStatusesList();
-        statuses.addAll(data);
-        statusesAdapter.setStatusesList(statuses);
+        statusesAdapter.setStatusesList(data);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
