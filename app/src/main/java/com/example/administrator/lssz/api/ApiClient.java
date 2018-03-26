@@ -45,45 +45,9 @@ public class ApiClient {
      *
      * @param accessToken 授权令牌
      */
-    public void requestPublicLine(String accessToken, final Callback<List<StatusBean>, IError> callback) {
-        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken;
-        final Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-
-        sClient.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                callback.failure(new Error(-1, e.getMessage()));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    // TODO 解析数据 -> List<StatusBean>，通过 callback.success() 回调
-                    List<StatusBean> statuses = new ArrayList<>();
-                    String data = response.body().string();
-                    Log.i("Response", data);
-                    JSONObject jsonObject = JSONObject.parseObject(data);
-                    JSONArray jsonArray = jsonObject.getJSONArray("statuses");
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        StatusBean status = JSONObject.parseObject(jsonObject1.toJSONString(), StatusBean.class);
-                        statuses.add(status);
-                    }
-                    callback.success(statuses);
-                } else {
-                    // TODO 回调错误数据
-                    Log.i("onResponse Error", "Response Error");
-                }
-
-            }
-        });
-    }
 
     public void requestPublicLine(String accessToken, int page, final Callback<List<StatusBean>, IError> callback) {
-        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken + "&page=" + page;
+        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken + "&page=" + page + "&count=7";
         final Request request = new Request.Builder()
                 .url(url)
                 .get()

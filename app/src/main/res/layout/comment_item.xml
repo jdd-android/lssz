@@ -20,8 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:textColor="@color/color000000"
-            android:textSize="10sp"
-            android:textStyle="bold" />
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/tv_comment_text"

@@ -88,14 +88,14 @@ public class PublicTimelineActivity extends Activity {
         };
         mRefrshLayout.setOnRefreshListener(mRefreshListener);
         //上滑加载
-//        statusesRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
-//            @Override
-//            public void onLoadMore() {
-//                statusesAdapter.setLoadState(statusesAdapter.LOADING);
-//                requestPublicLineData();
-//            }
-//        });
-
+        statusesRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                statusesAdapter.setLoadState(statusesAdapter.LOADING);
+                page = page + 1;
+                requestPublicLineData();
+            }
+        });
 
         // 请求数据并显示
         requestPublicLineData();
@@ -103,7 +103,7 @@ public class PublicTimelineActivity extends Activity {
     }
 
     private void requestPublicLineData() {
-        new ApiClient().requestPublicLine(mAccessToken.getToken(), new Callback<List<StatusBean>, IError>() {
+        new ApiClient().requestPublicLine(mAccessToken.getToken(), page, new Callback<List<StatusBean>, IError>() {
             @Override
             public void success(List<StatusBean> data) {
                 loadPublicLine(data);
@@ -118,10 +118,13 @@ public class PublicTimelineActivity extends Activity {
     }
 
     private void loadPublicLine(List<StatusBean> data) {
-        statusesAdapter.setStatusesList(data);
+        statuses = statusesAdapter.getStatusesList();
+        statuses.addAll(data);
+        statusesAdapter.setStatusesList(statuses);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                statusesAdapter.setLoadState(statusesAdapter.LOADING_COMPLETE);
                 statusesAdapter.notifyDataSetChanged();
             }
         });
