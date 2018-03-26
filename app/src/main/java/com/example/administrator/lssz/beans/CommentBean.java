@@ -7,7 +7,7 @@ import com.alibaba.fastjson.annotation.JSONField;
  */
 
 public class CommentBean {
-    @JSONField(name = "create_at")
+    @JSONField(name = "created_at")
     private String createdAt;
     @JSONField(name = "mid")
     private String mid;

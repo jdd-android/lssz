@@ -25,7 +25,7 @@ public class UserBean {
     private String location;
     @JSONField(name = "description")
     private String description;
-    @JSONField(name = "create_at")
+    @JSONField(name = "created_at")
     private String createdAt;
 
     public String getName() {

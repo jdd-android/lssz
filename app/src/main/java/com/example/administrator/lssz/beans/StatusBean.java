@@ -13,7 +13,7 @@ public class StatusBean {
     private int commmentsCount;
     @JSONField(name = "id")
     private String id;
-    @JSONField(name = "create_at")
+    @JSONField(name = "created_at")
     private String createdAt;
     @JSONField(name = "text")
     private String text;

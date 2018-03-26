@@ -1,14 +1,15 @@
 package com.example.administrator.lssz.ui;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
@@ -21,11 +22,14 @@ import com.example.administrator.lssz.common.IError;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
+
 import java.util.List;
 
 public class StatusCommentActivity extends Activity {
 
     private final static String STATUS_ID = "id";
+    private final static String STATUS = "status";
+
     private static Oauth2AccessToken mAccessToken;
     private ImageView ivStatusUserImage;
     private TextView tvStatusUserName;
@@ -39,6 +43,7 @@ public class StatusCommentActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_comment);
         String statusId = this.getIntent().getExtras().getString(STATUS_ID);
+        StatusBean status = JSONObject.parseObject(this.getIntent().getExtras().getString(STATUS), StatusBean.class);
 
         //读取令牌
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
@@ -54,7 +59,7 @@ public class StatusCommentActivity extends Activity {
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(StatusCommentActivity.this, LinearLayoutManager.VERTICAL, false));
         commentRecyclerView.setAdapter(commentAdapter);
         //请求微博数据
-        requestSingleStatusData(statusId);
+        loadStatus(status);
         requestStatusComment(statusId);
     }
 
@@ -94,13 +99,18 @@ public class StatusCommentActivity extends Activity {
             @Override
             public void success(List<CommentBean> data) {
                 Log.i("Callback Success", "StatusCommentCallback Success");
-                commentAdapter.setComments(data);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        commentAdapter.notifyDataSetChanged();
-                    }
-                });
+                if (data == null) {
+                    Toast.makeText(StatusCommentActivity.this, "评论不可见或暂无评论!", Toast.LENGTH_LONG).show();
+                } else {
+                    commentAdapter.setComments(data);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            commentAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+
             }
 
             @Override
