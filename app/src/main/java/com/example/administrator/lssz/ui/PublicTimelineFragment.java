@@ -49,18 +49,14 @@ public class PublicTimelineFragment extends Fragment {
         return new PublicTimelineFragment();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //读取令牌
-        mAccessToken = AccessTokenKeeper.readAccessToken(LsszApp.getInstance());
-        requestPublicTimelineData();
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statuses_timeline, null);
+
+        //读取令牌
+        mAccessToken = AccessTokenKeeper.readAccessToken(getActivity());
 
         //初始化adapter
         statusesAdapter = new StatusesAdapter(getActivity());
@@ -106,7 +102,11 @@ public class PublicTimelineFragment extends Fragment {
             }
         });
         // 显示
-        loadPublicTimeline(getPageStatuses());
+        if (totalStatuses.isEmpty()) {
+            requestPublicTimelineData();
+        } else {
+            loadPublicTimeline(getPageStatuses());
+        }
 
         return view;
     }
@@ -117,6 +117,7 @@ public class PublicTimelineFragment extends Fragment {
             public void success(List<StatusBean> data) {
                 if (!data.isEmpty()) {
                     totalStatuses = data;
+                    loadPublicTimeline(getPageStatuses());
                 }
             }
 
@@ -143,7 +144,12 @@ public class PublicTimelineFragment extends Fragment {
 
     private void loadPublicTimeline(List<StatusBean> data) {
         statusesAdapter.setStatusesList(data);
-        statusesAdapter.setLoadState(statusesAdapter.LOADING_COMPLETE);
-        statusesAdapter.notifyDataSetChanged();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                statusesAdapter.setLoadState(statusesAdapter.LOADING_COMPLETE);
+                statusesAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

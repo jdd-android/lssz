@@ -19,6 +19,7 @@ import com.example.administrator.lssz.beans.CommentBean;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
+import com.example.administrator.lssz.common.utils.DateUtils;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
@@ -88,7 +89,7 @@ public class StatusCommentActivity extends Activity {
                         .into(ivStatusUserImage);
                 tvStatusUserName.setText(statusBean.getUser().getName());
                 tvStatusText.setText(statusBean.getText());
-                tvStatusTime.setText(statusBean.getCreatedAt());
+                tvStatusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
             }
         });
 
