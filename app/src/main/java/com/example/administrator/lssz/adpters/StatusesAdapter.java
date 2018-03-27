@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
+import com.example.administrator.lssz.common.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .apply(RequestOptions.circleCropTransform())
                     .into(statusViewHolder.statusUserIamge);
             statusViewHolder.statusUserName.setText(statusBean.getUser().getName());
-            statusViewHolder.statusTime.setText(statusBean.getCreatedAt());
+            statusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
             statusViewHolder.statusText.setText(statusBean.getText());
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;

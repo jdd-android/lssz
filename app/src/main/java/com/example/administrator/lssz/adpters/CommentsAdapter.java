@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.CommentBean;
+import com.example.administrator.lssz.common.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                 .into(holder.ivCommentUserIamge);
         holder.tvCommentUserName.setText(comment.getUserBean().getName());
         holder.tvCommentUserText.setText(comment.getText());
-        holder.tvCommentUserTime.setText(comment.getCreatedAt());
+        holder.tvCommentUserTime.setText(DateUtils.readableDate(comment.getCreatedAt()));
 
     }
 
