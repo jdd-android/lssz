@@ -10,9 +10,16 @@ import com.sina.weibo.sdk.auth.AuthInfo;
  */
 
 public class LsszApp extends Application {
+    private static LsszApp instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         WbSdk.install(getApplicationContext(), new AuthInfo(getApplicationContext(), Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE));
+    }
+
+    public static LsszApp getInstance() {
+        return instance;
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.lssz.ui.HomeActivity;
 import com.example.administrator.lssz.ui.PublicTimelineActivity;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -99,8 +100,8 @@ public class WBDemoMainActivity extends Activity {
     }
 
 
-    public void getPublicMessages(View view){
-        Intent intent=new Intent(WBDemoMainActivity.this,PublicTimelineActivity.class);
+    public void getPublicMessages(View view) {
+        Intent intent = new Intent(WBDemoMainActivity.this, HomeActivity.class);
         startActivity(intent);
 
     }
@@ -112,8 +113,6 @@ public class WBDemoMainActivity extends Activity {
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
     }
-
-
 
 
 }

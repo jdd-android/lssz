@@ -25,7 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.PublicTimelineActivity" />
-        <activity android:name=".ui.StatusCommentActivity"></activity>
+        <activity android:name=".ui.StatusCommentActivity" />
+        <activity android:name=".ui.HomeActivity"></activity>
     </application>
 
 </manifest>

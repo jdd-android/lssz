@@ -46,8 +46,8 @@ public class ApiClient {
      * @param accessToken 授权令牌
      */
 
-    public void requestPublicLine(String accessToken, int page, final Callback<List<StatusBean>, IError> callback) {
-        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken + "&page=" + page;
+    public void requestPublicLine(String accessToken, final Callback<List<StatusBean>, IError> callback) {
+        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken ;
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -81,6 +81,45 @@ public class ApiClient {
         });
     }
 
+    /**
+     * 获取当前登录用户及其所关注（授权）用户的最新微博
+     *
+     * @param accessToken 授权令牌
+     */
+    public void requestFriendsLine(String accessToken, final Callback<List<StatusBean>, IError> callback) {
+        String url = BASE_API_URL + "statuses/friends_timeline.json?access_token=" + accessToken ;
+        final Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        sClient.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.failure(new Error(-1, e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    List<StatusBean> statuses = new ArrayList<>();
+                    String data = response.body().string();
+                    Log.i("Response", data);
+                    JSONObject jsonObject = JSONObject.parseObject(data);
+                    JSONArray jsonArray = jsonObject.getJSONArray("statuses");
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        StatusBean status = JSONObject.parseObject(jsonObject1.toJSONString(), StatusBean.class);
+                        statuses.add(status);
+                    }
+                    callback.success(statuses);
+                } else {
+                    Log.i("onResponse Error", "Response Error");
+                }
+
+            }
+        });
+    }
     /**
      * 请求用户信息
      *

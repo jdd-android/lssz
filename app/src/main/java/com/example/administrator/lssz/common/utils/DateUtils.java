@@ -23,8 +23,9 @@ public class DateUtils {
         }
     }
 
-//    public static Date getNowDate(){
-//        Date currentTime=new Date();
-//        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//    }
+    public static String getNowDate() {
+        Date currentTime = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(currentTime);
+    }
 }
