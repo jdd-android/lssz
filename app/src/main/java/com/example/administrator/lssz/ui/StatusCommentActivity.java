@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.adpters.CommentsAdapter;
+import com.example.administrator.lssz.adpters.ImageLoadAdapter;
 import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.CommentBean;
 import com.example.administrator.lssz.beans.StatusBean;
@@ -22,6 +23,8 @@ import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.utils.DateUtils;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.w4lle.library.NineGridAdapter;
+import com.w4lle.library.NineGridlayout;
 
 
 import java.util.List;
@@ -36,6 +39,7 @@ public class StatusCommentActivity extends Activity {
     private TextView tvStatusUserName;
     private TextView tvStatusTime;
     private TextView tvStatusText;
+    private NineGridlayout nineGridlayout;
     private RecyclerView commentRecyclerView;
     private CommentsAdapter commentAdapter;
 
@@ -53,6 +57,7 @@ public class StatusCommentActivity extends Activity {
         tvStatusUserName = (TextView) findViewById(R.id.tv_status_name);
         tvStatusTime = (TextView) findViewById(R.id.tv_status_time);
         tvStatusText = (TextView) findViewById(R.id.tv_status_text);
+        nineGridlayout = (NineGridlayout) findViewById(R.id.nineGrid_status_pics);
 
         //初始化评论RecyclerView
         commentRecyclerView = (RecyclerView) findViewById(R.id.comments_list);
@@ -90,6 +95,7 @@ public class StatusCommentActivity extends Activity {
                 tvStatusUserName.setText(statusBean.getUser().getName());
                 tvStatusText.setText(statusBean.getText());
                 tvStatusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
+                nineGridlayout.setAdapter(new ImageLoadAdapter(StatusCommentActivity.this, statusBean.getPicUrlsList()));
             }
         });
     }

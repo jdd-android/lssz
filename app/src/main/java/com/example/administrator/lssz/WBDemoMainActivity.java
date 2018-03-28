@@ -91,7 +91,6 @@ public class WBDemoMainActivity extends Activity {
     public void getPublicMessages(View view) {
         Intent intent = new Intent(WBDemoMainActivity.this, HomeActivity.class);
         startActivity(intent);
-
     }
 
     @Override

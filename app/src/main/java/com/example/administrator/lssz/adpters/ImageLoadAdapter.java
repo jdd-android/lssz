@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.PicUrlsBean;
+import com.example.administrator.lssz.common.utils.PicUrlUtils;
 import com.w4lle.library.NineGridAdapter;
 import com.w4lle.library.NineGridlayout;
 
@@ -54,9 +55,9 @@ public class ImageLoadAdapter extends NineGridAdapter {
 
     @Override
     public View getView(int position, View view) {
-        ImageView pic=new ImageView(context);
+        ImageView pic = new ImageView(context);
         Glide.with(context)
-                .load(getUrl(position))
+                .load(PicUrlUtils.getOriginalPic(getUrl(position)))
                 .apply(new RequestOptions().fitCenter())
                 .into(pic);
         return pic;
