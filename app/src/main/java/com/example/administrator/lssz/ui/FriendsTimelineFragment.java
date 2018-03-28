@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
-import com.example.administrator.lssz.LsszApp;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.adpters.StatusesAdapter;
 import com.example.administrator.lssz.api.ApiClient;
@@ -93,31 +92,25 @@ public class FriendsTimelineFragment extends Fragment {
         statusesRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore() {
-                statusesAdapter.setLoadState(statusesAdapter.LOADING);
-                if (pageStatuses.size() < totalStatuses.size()) {
-                    loadFriendsLine(getPageStatuses());
-                } else {
-                    statusesAdapter.setLoadState(statusesAdapter.LOADING_END);
-                }
+                requestFriendsLineData();
             }
         });
         //显示数据
-        if (totalStatuses.isEmpty()) {
-            requestFriendsLineData();
-        } else {
-            loadFriendsLine(getPageStatuses());
-        }
+        requestFriendsLineData();
 
         return view;
     }
 
     private void requestFriendsLineData() {
-        new ApiClient().requestFriendsLine(mAccessToken.getToken(), new Callback<List<StatusBean>, IError>() {
+        new ApiClient().requestFriendsLine(mAccessToken.getToken(), page, new Callback<List<StatusBean>, IError>() {
             @Override
             public void success(List<StatusBean> data) {
                 if (!data.isEmpty()) {
-                    totalStatuses = data;
-                    loadFriendsLine(getPageStatuses());
+                    pageStatuses = data;
+                    loadFriendsLine(pageStatuses);
+                    page++;
+                } else {
+                    statusesAdapter.setLoadState(statusesAdapter.LOADING_COMPLETE);
                 }
             }
 
@@ -128,22 +121,9 @@ public class FriendsTimelineFragment extends Fragment {
         });
     }
 
-    private List<StatusBean> getPageStatuses() {
-        if (totalStatuses.size() < pageStatuses.size() + PAGE_NUMBER) {
-            for (int i = (page - 1) * PAGE_NUMBER; i < totalStatuses.size(); i++) {
-                pageStatuses.add(totalStatuses.get(i));
-            }
-        } else {
-            for (int i = (page - 1) * PAGE_NUMBER; i < page * PAGE_NUMBER; i++) {
-                pageStatuses.add(totalStatuses.get(i));
-            }
-            page++;
-        }
-        return pageStatuses;
-    }
-
     private void loadFriendsLine(List<StatusBean> data) {
-        statusesAdapter.setStatusesList(data);
+        totalStatuses.addAll(data);
+        statusesAdapter.setStatusesList(totalStatuses);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

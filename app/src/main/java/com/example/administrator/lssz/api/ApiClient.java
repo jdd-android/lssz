@@ -47,7 +47,7 @@ public class ApiClient {
      */
 
     public void requestPublicLine(String accessToken, final Callback<List<StatusBean>, IError> callback) {
-        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken ;
+        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken;
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -85,9 +85,10 @@ public class ApiClient {
      * 获取当前登录用户及其所关注（授权）用户的最新微博
      *
      * @param accessToken 授权令牌
+     * @param page        请求页码
      */
-    public void requestFriendsLine(String accessToken, final Callback<List<StatusBean>, IError> callback) {
-        String url = BASE_API_URL + "statuses/friends_timeline.json?access_token=" + accessToken ;
+    public void requestFriendsLine(String accessToken, int page, final Callback<List<StatusBean>, IError> callback) {
+        String url = BASE_API_URL + "statuses/friends_timeline.json?access_token=" + accessToken + "&page=" + page;
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -120,6 +121,7 @@ public class ApiClient {
             }
         });
     }
+
     /**
      * 请求用户信息
      *
