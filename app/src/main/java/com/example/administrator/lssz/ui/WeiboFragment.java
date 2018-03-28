@@ -70,6 +70,5 @@ public class WeiboFragment extends Fragment {
                     return null;
             }
         }
-
     }
 }

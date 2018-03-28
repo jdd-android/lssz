@@ -49,7 +49,6 @@ public class PublicTimelineFragment extends Fragment {
         return new PublicTimelineFragment();
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -89,6 +88,7 @@ public class PublicTimelineFragment extends Fragment {
             }
         };
         mRefrshLayout.setOnRefreshListener(mRefreshListener);
+
         //上滑加载
         statusesRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -101,6 +101,7 @@ public class PublicTimelineFragment extends Fragment {
                 }
             }
         });
+
         // 显示
         if (totalStatuses.isEmpty()) {
             requestPublicTimelineData();

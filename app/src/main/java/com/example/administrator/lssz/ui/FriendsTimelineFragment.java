@@ -88,6 +88,7 @@ public class FriendsTimelineFragment extends Fragment {
             }
         };
         mRefrshLayout.setOnRefreshListener(mRefreshListener);
+
         //上滑加载
         statusesRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -95,6 +96,7 @@ public class FriendsTimelineFragment extends Fragment {
                 requestFriendsLineData();
             }
         });
+
         //显示数据
         requestFriendsLineData();
 

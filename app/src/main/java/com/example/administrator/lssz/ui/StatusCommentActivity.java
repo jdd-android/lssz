@@ -92,7 +92,6 @@ public class StatusCommentActivity extends Activity {
                 tvStatusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
             }
         });
-
     }
 
     private void requestStatusComment(String statusId) {
@@ -115,13 +114,11 @@ public class StatusCommentActivity extends Activity {
                         }
                     });
                 }
-
             }
 
             @Override
             public void failure(IError error) {
                 Log.i("Callback Error", "StatusCommentCallback Error");
-
             }
         });
     }
