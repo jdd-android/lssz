@@ -62,15 +62,27 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof StatusViewHolder) {
             StatusViewHolder statusViewHolder = (StatusViewHolder) holder;
-            StatusBean statusBean = mStatusesList.get(position);
+            final StatusBean statusBean = mStatusesList.get(position);
+            //给微博状态视图设置tag，传入当前statusBean
             statusViewHolder.itemView.setTag(statusBean);
+
             Glide.with(context).load(statusBean.getUser().getAvatarLarge())
                     .apply(RequestOptions.circleCropTransform())
                     .into(statusViewHolder.statusUserIamge);
             statusViewHolder.statusUserName.setText(statusBean.getUser().getName());
             statusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
             statusViewHolder.statusText.setText(statusBean.getText());
+
+            //加载图片，设置图片点击监听
             statusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, statusBean.getPicUrlsList()));
+            statusViewHolder.statusPics.setOnItemClickListerner(new NineGridlayout.OnItemClickListerner() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    //TODO 显示大图
+                    Toast.makeText(context, "这是第 " + position+1 + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
             switch (loadState) {

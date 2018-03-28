@@ -36,7 +36,7 @@ public class WeiboFragment extends Fragment {
     }
 
 
-    class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
         public MyFragmentPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
