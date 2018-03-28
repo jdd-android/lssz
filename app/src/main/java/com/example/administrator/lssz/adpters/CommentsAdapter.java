@@ -50,7 +50,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         holder.tvCommentUserName.setText(comment.getUserBean().getName());
         holder.tvCommentUserText.setText(comment.getText());
         holder.tvCommentUserTime.setText(DateUtils.readableDate(comment.getCreatedAt()));
-
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder {

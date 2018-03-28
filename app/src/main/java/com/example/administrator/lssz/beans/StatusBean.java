@@ -2,6 +2,8 @@ package com.example.administrator.lssz.beans;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/3/20.
  */
@@ -23,6 +25,16 @@ public class StatusBean {
     private String geo;
     @JSONField(name = "user")
     private UserBean user;
+    @JSONField(name = "pic_urls")
+    private List<PicUrlsBean> picUrlsList;
+
+    public List<PicUrlsBean> getPicUrlsList() {
+        return picUrlsList;
+    }
+
+    public void setPicUrlsList(List<PicUrlsBean> picUrlsList) {
+        this.picUrlsList = picUrlsList;
+    }
 
     public String getId() {
         return id;

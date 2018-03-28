@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.utils.DateUtils;
+import com.w4lle.library.NineGridlayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +70,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             statusViewHolder.statusUserName.setText(statusBean.getUser().getName());
             statusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
             statusViewHolder.statusText.setText(statusBean.getText());
+            statusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, statusBean.getPicUrlsList()));
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
             switch (loadState) {
@@ -116,15 +119,12 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mStatusesList = statusesList;
     }
 
-    public List<StatusBean> getStatusesList() {
-        return mStatusesList;
-    }
-
     static class StatusViewHolder extends RecyclerView.ViewHolder {
         ImageView statusUserIamge;
         TextView statusUserName;
         TextView statusTime;
         TextView statusText;
+        NineGridlayout statusPics;
 
         StatusViewHolder(View view) {
             super(view);
@@ -132,6 +132,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             statusUserName = view.findViewById(R.id.tv_status_name);
             statusTime = view.findViewById(R.id.tv_status_time);
             statusText = view.findViewById(R.id.tv_status_text);
+            statusPics = view.findViewById(R.id.nineGrid_status_pics);
         }
     }
 
