@@ -2,58 +2,68 @@ package com.example.administrator.lssz.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.PicUrlsBean;
+import com.example.administrator.lssz.common.utils.PicUrlUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2018/3/28.
  */
 
-public class CompleteImageDialog extends Dialog {
+public class CompleteImageDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
-    private ViewPager completeImageViewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
+    private ImageView imageView;
+    private String url;
 
-    private List<String> mUrls;
-    private List<File> mDownloadFiles;
-
-    public CompleteImageDialog(Context context) {
-        super(context);
+    public CompleteImageDialog(Context context, String url) {
+        super(context, R.style.NoFrameDialog);
         this.context = context;
-
-        View completeIamgeDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_complete_image, null);
-        completeImageViewPager = completeIamgeDialogView.findViewById(R.id.dialog_complete_iamge_pager);
-
-
+        this.url = url;
     }
 
-    public void setUrls(List<PicUrlsBean> picUrls) {
-        if (mUrls == null) {
-
-        }
-
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_complete_image, null);
+        imageView = (ImageView) dialogView.findViewById(R.id.iv_dialog_complete_image);
+        Glide.with(context)
+                .load(url)
+                .into(imageView);
+        super.onCreate(savedInstanceState);
+        setContentView(dialogView);
+        dialogView.setOnClickListener(this);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
     }
 
-    private class MyViewPagerAdapter extends PagerAdapter {
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return false;
-        }
-
-        @Override
-        public int getCount() {
-            return 0;
-        }
-
+    @Override
+    public void onClick(View v) {
+        dismiss();
     }
+
+    //    public void setUrls(List<PicUrlsBean> picUrls) {
+//        if (mUrls == null) {
+//            mUrls = new ArrayList<>();
+//        } else {
+//            mUrls.clear();
+//        }
+//        for (PicUrlsBean picUrl : picUrls) {
+//            mUrls.add(PicUrlUtils.getOriginalPic(picUrl.getThumbnailPic()));
+//        }
+//    }
 }

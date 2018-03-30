@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +21,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.utils.DateUtils;
+import com.example.administrator.lssz.common.utils.PicUrlUtils;
+import com.example.administrator.lssz.dialogs.CompleteImageDialog;
 import com.w4lle.library.NineGridlayout;
 
 import java.util.ArrayList;
@@ -79,8 +83,14 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onItemClick(View view, int position) {
                     //TODO 显示大图
-                    Toast.makeText(context, "这是第 " + position+1 + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(context, "这是第 " + (position + 1) + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
+                    CompleteImageDialog myDialog = new CompleteImageDialog(context, PicUrlUtils.getOriginalPic(statusBean.getPicUrlsList().get(position).getThumbnailPic()));
+                    myDialog.show();
+                    Window dialogWin = myDialog.getWindow();
+                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    dialogWin.setAttributes(lp);
                 }
             });
         } else if (holder instanceof FootViewHolder) {

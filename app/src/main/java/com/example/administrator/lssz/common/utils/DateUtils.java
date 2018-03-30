@@ -12,6 +12,8 @@ import java.util.Locale;
 public class DateUtils {
 
     private static final SimpleDateFormat POST_DATE_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);
+    private static final String MINITE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String DAY_DATE_FORMAT = "yyyy-MM-dd";
 
     public static String readableDate(String dateOrigin) {
         try {
@@ -25,7 +27,24 @@ public class DateUtils {
 
     public static String getNowDate() {
         Date currentTime = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat();
         return format.format(currentTime);
     }
+
+//    public String getTimeDiffer(String fromDate, String NowDate) {
+//        try {
+//            long from = DAY_DATE_FORMAT.parse(fromDate).getTime();
+//            long now = DAY_DATE_FORMAT.parse(NowDate).getTime();
+//            int day = (int) ((now - from) / (1000 * 60 * 60 * 24));
+//            if (day < 1) {
+//                return String.valueOf(day);
+//            } else {
+//                return DAY_DATE_FORMAT.format(DAY_DATE_FORMAT.parse(fromDate));
+//            }
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            return fromDate;
+//        }
+//    }
 }
