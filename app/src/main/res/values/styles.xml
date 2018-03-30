@@ -19,6 +19,7 @@
 
     <style name="NoFrameDialog" parent="android:Theme.Dialog">
         <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/colorffffff</item>
 
     </style>

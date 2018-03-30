@@ -2,6 +2,7 @@ package com.example.administrator.lssz.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -41,14 +42,13 @@ public class CompleteImageDialog extends Dialog implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_complete_image, null);
+        dialogView.setOnClickListener(this);
         imageView = (ImageView) dialogView.findViewById(R.id.iv_dialog_complete_image);
         Glide.with(context)
                 .load(url)
                 .into(imageView);
         super.onCreate(savedInstanceState);
         setContentView(dialogView);
-        dialogView.setOnClickListener(this);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
     }
 
     @Override

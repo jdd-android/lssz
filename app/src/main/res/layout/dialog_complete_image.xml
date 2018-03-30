@@ -2,13 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ScrollView
+
+    <com.example.administrator.lssz.views.MatrixImageView
+        android:id="@+id/iv_dialog_complete_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/iv_dialog_complete_image" />
-    </ScrollView>
+        android:layout_height="wrap_content" />
 
 </android.support.constraint.ConstraintLayout>
