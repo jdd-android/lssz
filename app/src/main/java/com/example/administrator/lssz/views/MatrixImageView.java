@@ -76,6 +76,8 @@ public class MatrixImageView extends AppCompatImageView {
                 mTempPoint = mStartPoint;
                 if (getScaleType() != ScaleType.MATRIX) {
                     setScaleType(ScaleType.MATRIX);
+                    mMatrix.set(getImageMatrix());
+                    mMatrix.getValues(mMatrixValue);
                     setImageMatrix(mMatrix);
                 }
                 break;
