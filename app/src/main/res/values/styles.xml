@@ -24,4 +24,8 @@
 
     </style>
 
+    <style name="MyTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">#FFAAAA</item>
+    </style>
+
 </resources>

@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
     android:layout_marginTop="4dp"
     android:background="@color/colorffffff">
+
 
     <ImageView
         android:id="@+id/iv_status_image"
@@ -43,14 +45,34 @@
         android:textColor="@color/color333333"
         android:textSize="14sp" />
 
-    <com.w4lle.library.NineGridlayout
-        android:id="@+id/nineGrid_status_pics"
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_status_text"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"/>
+        android:layout_below="@id/tv_status_text"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/color999999">
 
+        <TextView
+            android:id="@+id/tv_origin_status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:textColor="@color/color333333"
+            android:textSize="14sp" />
+
+        <com.w4lle.library.NineGridlayout
+            android:id="@+id/nineGrid_status_pics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_origin_status_text"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        </com.w4lle.library.NineGridlayout>
+    </RelativeLayout>
 
 </RelativeLayout>

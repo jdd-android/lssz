@@ -3,6 +3,7 @@ package com.example.administrator.lssz.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,6 +23,7 @@ public class WeiboFragment extends Fragment {
 
     private ViewPager mViewPager;
     private MyFragmentPagerAdapter mFragmentPagerAdapter;
+    private TabLayout mTabLayout;
     private View mRoot;
 
     @Nullable
@@ -29,8 +31,12 @@ public class WeiboFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.fragment_home_weibo, null);
         mViewPager = mRoot.findViewById(R.id.weibo_pager);
+        mTabLayout = mRoot.findViewById(R.id.weibo_tablayout);
         mFragmentPagerAdapter = new MyFragmentPagerAdapter(getFragmentManager());
         mViewPager.setAdapter(mFragmentPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setTabMode(TabLayout.GRAVITY_CENTER);
+
 
         return mRoot;
     }

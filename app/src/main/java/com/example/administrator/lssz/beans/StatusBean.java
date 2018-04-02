@@ -27,6 +27,16 @@ public class StatusBean {
     private UserBean user;
     @JSONField(name = "pic_urls")
     private List<PicUrlsBean> picUrlsList;
+    @JSONField(name = "retweeted_status")
+    private StatusBean retweetedStatus;
+
+    public StatusBean getRetweetedStatus() {
+        return retweetedStatus;
+    }
+
+    public void setRetweetedStatus(StatusBean retweetedStatus) {
+        this.retweetedStatus = retweetedStatus;
+    }
 
     public List<PicUrlsBean> getPicUrlsList() {
         return picUrlsList;
