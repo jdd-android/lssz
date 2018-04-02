@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 public class MatrixImageView extends AppCompatImageView {
 
-    private final static float CLICK_RANGE = 50F;
+    private final static float CLICK_RANGE = 150F;
     /**
      * 两个手指之间的距离
      */
@@ -97,10 +97,8 @@ public class MatrixImageView extends AppCompatImageView {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                mEndPoint.set(event.getX(), event.getY());
-                break;
-
             case MotionEvent.ACTION_CANCEL:
+                mEndPoint.set(event.getX(), event.getY());
                 break;
             default:
                 break;
