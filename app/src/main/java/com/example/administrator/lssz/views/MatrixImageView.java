@@ -76,6 +76,7 @@ public class MatrixImageView extends AppCompatImageView {
                 mTempPoint = mStartPoint;
                 if (getScaleType() != ScaleType.MATRIX) {
                     setScaleType(ScaleType.MATRIX);
+                    setImageMatrix(mMatrix);
                 }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -103,7 +104,7 @@ public class MatrixImageView extends AppCompatImageView {
             default:
                 break;
         }
-        if (calculateMoveDistance(mStartPoint, mEndPoint) < CLICK_RANGE) {
+        if (calculateMoveDistance(mStartPoint, mEndPoint) <= CLICK_RANGE) {
             isActionConsume = false;
         }
         return isActionConsume;
@@ -149,9 +150,12 @@ public class MatrixImageView extends AppCompatImageView {
         float dragY = event.getY() - mTempPoint.y;
         mTempPoint.set(event.getX(), event.getY());
 
+
         mMatrix.set(getImageMatrix());
         mMatrix.getValues(mMatrixValue);
         mMatrix.postTranslate(0, dragY);
         setImageMatrix(mMatrix);
+
+
     }
 }
