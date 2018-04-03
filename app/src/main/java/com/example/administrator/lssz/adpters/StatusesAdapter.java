@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,8 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .into(statusViewHolder.statusUserIamge);
             statusViewHolder.statusUserName.setText(statusBean.getUser().getName());
             statusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
-            statusViewHolder.statusText.setText(Html.fromHtml(StatusUtils.setTopicColor(statusBean.getText())));
+            statusViewHolder.statusText.setText(StatusUtils.getClickableSpan(statusBean.getText()));
+            statusViewHolder.statusText.setMovementMethod(LinkMovementMethod.getInstance());
 
             //加载图片，设置图片点击监听
             statusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, statusBean.getPicUrlsList()));
@@ -107,8 +109,10 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .into(repostStatusViewHolder.statusUserIamge);
             repostStatusViewHolder.statusUserName.setText(statusBean.getUser().getName());
             repostStatusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
-            repostStatusViewHolder.statusText.setText(Html.fromHtml(StatusUtils.setTopicColor(StatusUtils.getRepostText(statusBean))));
-            repostStatusViewHolder.originStatusText.setText(Html.fromHtml(StatusUtils.setTopicColor(StatusUtils.getOriginText(StatusUtils.getOriginStatus(statusBean)))));
+            repostStatusViewHolder.statusText.setText(StatusUtils.getClickableSpan(StatusUtils.getRepostText(statusBean)));
+            repostStatusViewHolder.statusText.setMovementMethod(LinkMovementMethod.getInstance());
+            repostStatusViewHolder.originStatusText.setText(StatusUtils.getClickableSpan(StatusUtils.getOriginText(StatusUtils.getOriginStatus(statusBean))));
+            repostStatusViewHolder.originStatusText.setMovementMethod(LinkMovementMethod.getInstance());
 
             repostStatusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, StatusUtils.getOriginStatus(statusBean).getPicUrlsList()));
             repostStatusViewHolder.statusPics.setOnItemClickListerner(new NineGridlayout.OnItemClickListerner() {
