@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 public class MatrixImageView extends AppCompatImageView {
 
+    private ImageClickListener imageClickListener;
+
     private final static float CLICK_RANGE = 150F;
     /**
      * 两个手指之间的距离
@@ -108,6 +110,7 @@ public class MatrixImageView extends AppCompatImageView {
         }
         if (calculateMoveDistance(mStartPoint, mEndPoint) <= CLICK_RANGE) {
             isActionConsume = false;
+            imageClickListener.imageListener(isActionConsume);
         }
         return isActionConsume;
     }
@@ -157,7 +160,9 @@ public class MatrixImageView extends AppCompatImageView {
         mMatrix.getValues(mMatrixValue);
         mMatrix.postTranslate(0, dragY);
         setImageMatrix(mMatrix);
+    }
 
-
+    public interface ImageClickListener {
+        void imageListener(boolean isClick);
     }
 }

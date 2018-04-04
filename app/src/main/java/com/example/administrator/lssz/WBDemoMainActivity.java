@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.administrator.lssz.api.ApiClient;
+import com.example.administrator.lssz.beans.UserBean;
+import com.example.administrator.lssz.common.Callback;
+import com.example.administrator.lssz.common.IError;
+import com.example.administrator.lssz.common.UserInfoKeeper;
 import com.example.administrator.lssz.ui.HomeActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -37,6 +42,20 @@ public class WBDemoMainActivity extends Activity {
         } else {
             auth2AllInOne();
         }
+    }
+
+    private void getUserInfo(Oauth2AccessToken mAccessToken){
+        new ApiClient().requestUsersShow(mAccessToken.getToken(), mAccessToken.getUid(), new Callback<UserBean, IError>() {
+            @Override
+            public void success(UserBean data) {
+                UserInfoKeeper.writeUserInfo(WBDemoMainActivity.this,data);
+            }
+
+            @Override
+            public void failure(IError error) {
+
+            }
+        });
     }
 
     private void updateTokenView(boolean hasExisted) {

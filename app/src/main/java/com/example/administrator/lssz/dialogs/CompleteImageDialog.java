@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.PicUrlsBean;
 import com.example.administrator.lssz.common.utils.PicUrlUtils;
+import com.example.administrator.lssz.views.MatrixImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by Administrator on 2018/3/28.
  */
 
-public class CompleteImageDialog extends Dialog implements View.OnClickListener {
+public class CompleteImageDialog extends Dialog implements MatrixImageView.ImageClickListener {
 
     private Context context;
     private ImageView imageView;
@@ -42,7 +43,7 @@ public class CompleteImageDialog extends Dialog implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_complete_image, null);
-        dialogView.setOnClickListener(this);
+
         imageView = (ImageView) dialogView.findViewById(R.id.iv_dialog_complete_image);
         Glide.with(context)
                 .load(url)
@@ -52,8 +53,10 @@ public class CompleteImageDialog extends Dialog implements View.OnClickListener 
     }
 
     @Override
-    public void onClick(View v) {
-        dismiss();
+    public void imageListener(boolean isClick) {
+        if (isClick) {
+            dismiss();
+        }
     }
 
     //    public void setUrls(List<PicUrlsBean> picUrls) {
