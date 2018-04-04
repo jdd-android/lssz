@@ -2,6 +2,7 @@ package com.example.administrator.lssz.ui;
 
 import android.app.Activity;
 
+import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -46,7 +47,8 @@ public class HomeActivity extends FragmentActivity {
                     setSelectedItem(id);
                     break;
                 case R.id.home_tv_add:
-                    setSelectedItem(id);
+//                    setSelectedItem(id);
+                    startActivity(new Intent(HomeActivity.this, UpdateStatusActivity.class));
                     break;
                 case R.id.home_tv_discover:
                     setSelectedItem(id);
@@ -61,7 +63,7 @@ public class HomeActivity extends FragmentActivity {
     };
 
     private void setDefaultFragment() {
-        mWeiboFragment=new WeiboFragment();
+        mWeiboFragment = new WeiboFragment();
         mFragmentManager.beginTransaction().add(R.id.home_content, mWeiboFragment).commit();
         setSelectedItem(R.id.home_tv_weibo);
     }

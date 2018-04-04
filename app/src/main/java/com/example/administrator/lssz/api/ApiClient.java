@@ -18,11 +18,15 @@ import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Call;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSink;
 
 /**
  * @author lc. 2018-03-22 10:12
@@ -34,6 +38,8 @@ public class ApiClient {
     private static final OkHttpClient sClient;
 
     private static final String BASE_API_URL = "https://api.weibo.com/2/";
+    private static final String CALL_BACK_SUCCESS="Success";
+    private static final String CALL_BACK_FAIL="Fail";
 
     static {
         // 设置一个全局的 OkHttpClient 可以复用连接池，减少资源占用
@@ -224,6 +230,46 @@ public class ApiClient {
                 }
             }
         });
+    }
+
+    /**
+     * 发布一条带链接的新微博
+     *
+     * @param accessToken 授权令牌
+     * @param status      微博内容
+     */
+
+    public void postNewStatus(String accessToken, String status, final Callback<StatusBean , IError> callback) {
+        String url = BASE_API_URL + "statuses/share.json";
+//        RequestBody requestBody = RequestBody.create(MediaType.parse(status), "status=http://www.sina.com " + status);
+        RequestBody formBody = new FormBody.Builder()
+                .add("access_token", accessToken)
+                .add("status", status+"http://www.baidu.com")
+                .build();
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+        sClient.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.failure(new Error(-1, e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String data = response.body().string();
+                    Log.i("Response", data);
+                    StatusBean statusBean = JSONObject.parseObject(data, StatusBean.class);
+                    callback.success(statusBean);
+                } else {
+                    Log.i("SingleStatusResponse", "Response Fail");
+                }
+
+            }
+        });
+
     }
 
     static class LoggingInterceptor implements Interceptor {
