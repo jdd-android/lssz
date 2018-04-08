@@ -11,20 +11,42 @@ import android.view.View;
 
 
 import com.example.administrator.lssz.R;
+import com.example.administrator.lssz.api.ApiClient;
+import com.example.administrator.lssz.beans.UserBean;
+import com.example.administrator.lssz.common.Callback;
+import com.example.administrator.lssz.common.IError;
+import com.example.administrator.lssz.common.UserInfoKeeper;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 public class HomeActivity extends FragmentActivity {
     private FragmentManager mFragmentManager;
     private WeiboFragment mWeiboFragment;
+    private static Oauth2AccessToken accessToken;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        accessToken=AccessTokenKeeper.readAccessToken(HomeActivity.this);
+        loadUserInfo();
         initView();
         setDefaultFragment();
     }
 
+    private void loadUserInfo(){
+        new ApiClient().requestUsersShow(accessToken.getToken(), accessToken.getUid(), new Callback<UserBean, IError>() {
+            @Override
+            public void success(UserBean data) {
+                UserInfoKeeper.writeUserInfo(HomeActivity.this,data);
+            }
+
+            @Override
+            public void failure(IError error) {
+            }
+        });
+    }
     private void initView() {
         findViewById(R.id.home_tv_weibo).setOnClickListener(homeTabListener);
         findViewById(R.id.home_tv_message).setOnClickListener(homeTabListener);

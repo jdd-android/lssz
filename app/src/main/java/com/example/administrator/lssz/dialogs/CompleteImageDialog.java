@@ -15,7 +15,7 @@ import com.example.administrator.lssz.views.MatrixImageView;
  * Created by Administrator on 2018/3/28.
  */
 
-public class CompleteImageDialog extends Dialog implements MatrixImageView.ImageClickListener {
+public class CompleteImageDialog extends Dialog {
 
     private Context context;
     private ImageView imageView;
@@ -43,13 +43,6 @@ public class CompleteImageDialog extends Dialog implements MatrixImageView.Image
                 .into(imageView);
         super.onCreate(savedInstanceState);
         setContentView(dialogView);
-    }
-
-    @Override
-    public void imageListener(boolean isClick) {
-//        if (isClick) {
-//            dismiss();
-//        }
     }
 
     //    public void setUrls(List<PicUrlsBean> picUrls) {

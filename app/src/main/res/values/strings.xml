@@ -3,6 +3,12 @@
 
     <string name="app_name">lssz</string>
 
+    <!--发布一条新微博-->
+    <string name="newstatus_cancel">返回</string>
+    <string name="newstatus_send">发布</string>
+    <string name="newstatue_title">New Weibo</string>
+    <string name="newstatus_hint">What\'s on your mind ?</string>
+
     <!-- 功能列表 -->
     <string name="weibosdk_demo_feature_oauth">微博授权</string>
     <string name="weibosdk_demo_feature_share">分享到微博</string>

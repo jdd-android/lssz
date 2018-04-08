@@ -15,8 +15,6 @@ import android.view.MotionEvent;
 
 public class MatrixImageView extends AppCompatImageView {
 
-    private ImageClickListener imageClickListener;
-
     /** 无状态 */
     private final int STATE_NONE = 0;
     /** 正在拖拽 */
@@ -78,7 +76,6 @@ public class MatrixImageView extends AppCompatImageView {
 
         int action = event.getActionMasked();
         int actionIndex = event.getActionIndex();
-        boolean isActionConsume = true;
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -185,9 +182,5 @@ public class MatrixImageView extends AppCompatImageView {
         mMatrix.getValues(mMatrixValue);
         mMatrix.postTranslate(0, dragY);
         setImageMatrix(mMatrix);
-    }
-
-    public interface ImageClickListener {
-        void imageListener(boolean isClick);
     }
 }

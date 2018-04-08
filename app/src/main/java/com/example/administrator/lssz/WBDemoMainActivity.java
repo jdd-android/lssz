@@ -13,6 +13,7 @@ import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.UserInfoKeeper;
 import com.example.administrator.lssz.ui.HomeActivity;
+import com.example.administrator.lssz.ui.UpdateStatusActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WbAuthListener;
@@ -108,7 +109,7 @@ public class WBDemoMainActivity extends Activity {
 
 
     public void getPublicMessages(View view) {
-        Intent intent = new Intent(WBDemoMainActivity.this, HomeActivity.class);
+        Intent intent = new Intent(WBDemoMainActivity.this,HomeActivity.class);
         startActivity(intent);
     }
 

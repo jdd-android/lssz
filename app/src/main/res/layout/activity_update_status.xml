@@ -4,14 +4,62 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/cardview_light_background">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:background="#00000000"
+                android:gravity="start|center_vertical"
+                android:onClick="cancelNewStatus"
+                android:text="@string/newstatus_cancel" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="8dp"
+                android:text="@string/newstatue_title"
+                android:textAllCaps="false"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_update_status_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="8dp"
+                android:gravity="top"
+                android:textAllCaps="false"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/bt_update_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:background="#00000000"
+                android:enabled="false"
+                android:onClick="updateStatus"
+                android:text="@string/newstatus_send"
+                android:textColor="@color/send_new_status_button_textcolor" />
+        </FrameLayout>
+
+
+    </android.support.v7.widget.Toolbar>
+
     <EditText
         android:id="@+id/ed_update_status"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="updateStatus"
-        android:text="发布" />
+        android:background="@null"
+        android:hint="@string/newstatus_hint" />
 </LinearLayout>
