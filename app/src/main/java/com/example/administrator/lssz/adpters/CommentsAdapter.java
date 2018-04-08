@@ -1,6 +1,7 @@
 package com.example.administrator.lssz.adpters;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.CommentBean;
 import com.example.administrator.lssz.common.utils.DateUtils;
+import com.example.administrator.lssz.databinding.CommentItemBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,12 @@ import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentViewHolder> {
     private Context context;
-    private List<CommentBean> comments=new ArrayList<>();
+    private List<CommentBean> comments = new ArrayList<>();
+    private LayoutInflater mInflater;
 
-    public CommentsAdapter(Context context){
-        this.context=context;
+    public CommentsAdapter(Context context) {
+        this.context = context;
+        mInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -36,41 +40,25 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     @Override
     public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.comment_item,parent,false);
-        CommentViewHolder holder=new CommentViewHolder(view);
-        return holder;
+        CommentItemBinding binding= DataBindingUtil.inflate(mInflater,R.layout.comment_item,parent,false);
+        return new CommentViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
-        CommentBean comment=comments.get(position);
-        Glide.with(context).load(comment.getUserBean().getAvatarLarge())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.ivCommentUserIamge);
-        holder.tvCommentUserName.setText(comment.getUserBean().getName());
-        holder.tvCommentUserText.setText(comment.getText());
-        holder.tvCommentUserTime.setText(DateUtils.readableDate(comment.getCreatedAt()));
-    }
+        CommentItemBinding binding=DataBindingUtil.getBinding(holder.itemView);
+        binding.setComment(comments.get(position));
+        binding.executePendingBindings();
 
-    class CommentViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView ivCommentUserIamge;
-        TextView tvCommentUserName;
-        TextView tvCommentUserText;
-        TextView tvCommentUserTime;
-
-        CommentViewHolder(View itemView) {
-            super(itemView);
-            ivCommentUserIamge = (ImageView) itemView.findViewById(R.id.iv_comment_user_image);
-            tvCommentUserName = (TextView) itemView.findViewById(R.id.tv_comment_name);
-            tvCommentUserText = (TextView) itemView.findViewById(R.id.tv_comment_text);
-            tvCommentUserTime = (TextView) itemView.findViewById(R.id.tv_comment_time);
-
-
-        }
     }
 
     public void setComments(List<CommentBean> comments) {
         this.comments = comments;
+    }
+
+    class CommentViewHolder extends RecyclerView.ViewHolder{
+        CommentViewHolder(CommentItemBinding binding){
+            super(binding.getRoot());
+        }
     }
 }

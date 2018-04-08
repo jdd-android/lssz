@@ -1,47 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    android:layout_marginTop="4dp"
-    android:background="@color/colorffffff"
-    android:orientation="horizontal">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/iv_comment_user_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
+    <data>
 
-    <LinearLayout
+        <import type="com.example.administrator.lssz.common.utils.DateUtils" />
+
+        <import type="com.example.administrator.lssz.common.utils.StatusUtils" />
+
+        <variable
+            name="comment"
+            type="com.example.administrator.lssz.beans.CommentBean" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorffffff"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_comment_name"
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:imageUrl="@{comment.userBean.avatarLarge}" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:textColor="@color/color000000"
-            android:textSize="10sp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_comment_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:textColor="@color/color333333"
-            android:textSize="12sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="@{comment.userBean.name}"
+                android:textColor="@color/color000000"
+                android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/tv_comment_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/color666666"
-            android:textSize="10sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@{StatusUtils.getClickableSpan(comment.text)}"
+                android:textColor="@color/color333333"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:text="@{DateUtils.readableDate(comment.createdAt)}"
+                android:textColor="@color/color666666"
+                android:textSize="10sp" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</layout>

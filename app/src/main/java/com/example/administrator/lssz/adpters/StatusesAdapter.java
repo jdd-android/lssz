@@ -1,6 +1,8 @@
 package com.example.administrator.lssz.adpters;
 
 import android.content.Context;
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +27,8 @@ import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.utils.DateUtils;
 import com.example.administrator.lssz.common.utils.PicUrlUtils;
 import com.example.administrator.lssz.common.utils.StatusUtils;
+import com.example.administrator.lssz.databinding.RepostStatusItemBinding;
+import com.example.administrator.lssz.databinding.StatusItemBinding;
 import com.example.administrator.lssz.dialogs.CompleteImageDialog;
 import com.w4lle.library.NineGridlayout;
 
@@ -71,63 +75,70 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof StatusViewHolder) {
-            StatusViewHolder statusViewHolder = (StatusViewHolder) holder;
-            final StatusBean statusBean = mStatusesList.get(position);
-            //给微博状态视图设置tag，传入当前statusBean
-            statusViewHolder.itemView.setTag(statusBean);
-
-            Glide.with(context).load(statusBean.getUser().getAvatarLarge())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(statusViewHolder.statusUserIamge);
-            statusViewHolder.statusUserName.setText(statusBean.getUser().getName());
-            statusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
-            statusViewHolder.statusText.setText(StatusUtils.getClickableSpan(statusBean.getText()));
-            statusViewHolder.statusText.setMovementMethod(LinkMovementMethod.getInstance());
-
-            //加载图片，设置图片点击监听
-            statusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, statusBean.getPicUrlsList()));
-            statusViewHolder.statusPics.setOnItemClickListerner(new NineGridlayout.OnItemClickListerner() {
-                @Override
-                public void onItemClick(View view, int position) {
-//                    Toast.makeText(context, "这是第 " + (position + 1) + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
-                    CompleteImageDialog myDialog = new CompleteImageDialog(context, PicUrlUtils.getOriginalPic(statusBean.getPicUrlsList().get(position).getThumbnailPic()));
-                    myDialog.show();
-                    Window dialogWin = myDialog.getWindow();
-                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
-                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                    dialogWin.setAttributes(lp);
-                }
-            });
+            StatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
+            binding.setStatus(mStatusesList.get(position));
+            binding.executePendingBindings();
+//
+//            StatusViewHolder statusViewHolder = (StatusViewHolder) holder;
+//            final StatusBean statusBean = mStatusesList.get(position);
+//            //给微博状态视图设置tag，传入当前statusBean
+//            statusViewHolder.itemView.setTag(statusBean);
+//
+//            Glide.with(context).load(statusBean.getUser().getAvatarLarge())
+//                    .apply(RequestOptions.circleCropTransform())
+//                    .into(statusViewHolder.statusUserIamge);
+//            statusViewHolder.statusUserName.setText(statusBean.getUser().getName());
+//            statusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
+//            statusViewHolder.statusText.setText(StatusUtils.getClickableSpan(statusBean.getText()));
+//            statusViewHolder.statusText.setMovementMethod(LinkMovementMethod.getInstance());
+//
+//            //加载图片，设置图片点击监听
+//            statusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, statusBean.getPicUrlsList()));
+//            statusViewHolder.statusPics.setOnItemClickListerner(new NineGridlayout.OnItemClickListerner() {
+//                @Override
+//                public void onItemClick(View view, int position) {
+////                    Toast.makeText(context, "这是第 " + (position + 1) + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
+//                    CompleteImageDialog myDialog = new CompleteImageDialog(context, PicUrlUtils.getOriginalPic(statusBean.getPicUrlsList().get(position).getThumbnailPic()));
+//                    myDialog.show();
+//                    Window dialogWin = myDialog.getWindow();
+//                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
+//                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//                    dialogWin.setAttributes(lp);
+//                }
+//            });
         } else if (holder instanceof RepostStatusViewHolder) {
-            RepostStatusViewHolder repostStatusViewHolder = (RepostStatusViewHolder) holder;
-            final StatusBean statusBean = mStatusesList.get(position);
-            repostStatusViewHolder.itemView.setTag(StatusUtils.getOriginStatus(statusBean));
-
-            Glide.with(context).load(statusBean.getUser().getAvatarLarge())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(repostStatusViewHolder.statusUserIamge);
-            repostStatusViewHolder.statusUserName.setText(statusBean.getUser().getName());
-            repostStatusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
-            repostStatusViewHolder.statusText.setText(StatusUtils.getClickableSpan(StatusUtils.getRepostText(statusBean)));
-            repostStatusViewHolder.statusText.setMovementMethod(LinkMovementMethod.getInstance());
-            repostStatusViewHolder.originStatusText.setText(StatusUtils.getClickableSpan(StatusUtils.getOriginText(StatusUtils.getOriginStatus(statusBean))));
-            repostStatusViewHolder.originStatusText.setMovementMethod(LinkMovementMethod.getInstance());
-
-            repostStatusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, StatusUtils.getOriginStatus(statusBean).getPicUrlsList()));
-            repostStatusViewHolder.statusPics.setOnItemClickListerner(new NineGridlayout.OnItemClickListerner() {
-                @Override
-                public void onItemClick(View view, int position) {
-//                    Toast.makeText(context, "这是第 " + (position + 1) + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
-                    CompleteImageDialog myDialog = new CompleteImageDialog(context, PicUrlUtils.getOriginalPic(StatusUtils.getOriginStatus(statusBean).getPicUrlsList().get(position).getThumbnailPic()));
-                    myDialog.show();
-                    Window dialogWin = myDialog.getWindow();
-                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
-                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                    dialogWin.setAttributes(lp);
-                }
-            });
+            RepostStatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
+            binding.setStatus(mStatusesList.get(position));
+            binding.executePendingBindings();
+//            RepostStatusViewHolder repostStatusViewHolder = (RepostStatusViewHolder) holder;
+//            final StatusBean statusBean = mStatusesList.get(position);
+//            repostStatusViewHolder.itemView.setTag(StatusUtils.getOriginStatus(statusBean));
+//
+//            Glide.with(context).load(statusBean.getUser().getAvatarLarge())
+//                    .apply(RequestOptions.circleCropTransform())
+//                    .into(repostStatusViewHolder.statusUserIamge);
+//            repostStatusViewHolder.statusUserName.setText(statusBean.getUser().getName());
+//            repostStatusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
+//            repostStatusViewHolder.statusText.setText(StatusUtils.getClickableSpan(StatusUtils.getRepostText(statusBean)));
+//            repostStatusViewHolder.statusText.setMovementMethod(LinkMovementMethod.getInstance());
+//            repostStatusViewHolder.originStatusText.setText(StatusUtils.getClickableSpan(StatusUtils.getOriginText(StatusUtils.getOriginStatus(statusBean))));
+//            repostStatusViewHolder.originStatusText.setMovementMethod(LinkMovementMethod.getInstance());
+//
+//            repostStatusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, StatusUtils.getOriginStatus(statusBean).getPicUrlsList()));
+//            repostStatusViewHolder.statusPics.setOnItemClickListerner(new NineGridlayout.OnItemClickListerner() {
+//                @Override
+//                public void onItemClick(View view, int position) {
+////                    Toast.makeText(context, "这是第 " + (position + 1) + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
+//                    CompleteImageDialog myDialog = new CompleteImageDialog(context, PicUrlUtils.getOriginalPic(StatusUtils.getOriginStatus(statusBean).getPicUrlsList().get(position).getThumbnailPic()));
+//                    myDialog.show();
+//                    Window dialogWin = myDialog.getWindow();
+//                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
+//                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//                    dialogWin.setAttributes(lp);
+//                }
+//            });
 
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
@@ -162,14 +173,11 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM_POST) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.status_item, parent, false);
-            view.setOnClickListener(this);
-            return new StatusViewHolder(view);
+            StatusItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.status_item, parent, false);
+            return new StatusViewHolder(binding);
         } else if (viewType == TYPE_ITEM_REPOST) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.repost_status_item, parent, false);
-            view.setOnClickListener(this);
-            return new RepostStatusViewHolder(view);
-
+            RepostStatusItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.repost_status_item, parent, false);
+            return new RepostStatusViewHolder(binding);
         } else if (viewType == TYPE_FOOTER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.refresh_footer, parent, false);
             return new FootViewHolder(view);
@@ -182,38 +190,25 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     static class StatusViewHolder extends RecyclerView.ViewHolder {
-        ImageView statusUserIamge;
-        TextView statusUserName;
-        TextView statusTime;
-        TextView statusText;
-        NineGridlayout statusPics;
+//        ImageView statusUserIamge;
+//        TextView statusUserName;
+//        TextView statusTime;
+//        TextView statusText;
+//        NineGridlayout statusPics;
 
-        StatusViewHolder(View view) {
-            super(view);
-            statusUserIamge = view.findViewById(R.id.iv_status_image);
-            statusUserName = view.findViewById(R.id.tv_status_name);
-            statusTime = view.findViewById(R.id.tv_status_time);
-            statusText = view.findViewById(R.id.tv_status_text);
-            statusPics = view.findViewById(R.id.nineGrid_status_pics);
+        StatusViewHolder(StatusItemBinding binding) {
+            super(binding.getRoot());
+//            statusUserIamge = view.findViewById(R.id.iv_status_image);
+//            statusUserName = view.findViewById(R.id.tv_status_name);
+//            statusTime = view.findViewById(R.id.tv_status_time);
+//            statusText = view.findViewById(R.id.tv_status_text);
+//            statusPics = view.findViewById(R.id.nineGrid_status_pics);
         }
     }
 
     static class RepostStatusViewHolder extends RecyclerView.ViewHolder {
-        ImageView statusUserIamge;
-        TextView statusUserName;
-        TextView statusTime;
-        TextView statusText;
-        TextView originStatusText;
-        NineGridlayout statusPics;
-
-        RepostStatusViewHolder(View view) {
-            super(view);
-            statusUserIamge = view.findViewById(R.id.iv_status_image);
-            statusUserName = view.findViewById(R.id.tv_status_name);
-            statusTime = view.findViewById(R.id.tv_status_time);
-            statusText = view.findViewById(R.id.tv_status_text);
-            originStatusText = view.findViewById(R.id.tv_origin_status_text);
-            statusPics = view.findViewById(R.id.nineGrid_status_pics);
+        RepostStatusViewHolder(RepostStatusItemBinding binding) {
+            super(binding.getRoot());
         }
     }
 
