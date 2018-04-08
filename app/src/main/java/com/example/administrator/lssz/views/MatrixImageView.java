@@ -4,13 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Toast;
 
 /**
  * @author lc. 2018-03-30 09:56
@@ -21,7 +17,19 @@ public class MatrixImageView extends AppCompatImageView {
 
     private ImageClickListener imageClickListener;
 
-    private final static float CLICK_RANGE = 150F;
+    /** 无状态 */
+    private final int STATE_NONE = 0;
+    /** 正在拖拽 */
+    private final int STATE_DRAGING = 1;
+    /** 正在缩放 */
+    private final int STATE_ZOOMING = 2;
+
+    private final static float CLICK_RANGE = 10F;
+
+    private int mStartPointerId = 0;
+
+    private int mState = STATE_NONE;
+
     /**
      * 两个手指之间的距离
      */
@@ -74,8 +82,10 @@ public class MatrixImageView extends AppCompatImageView {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                mState = STATE_NONE;
+                mStartPointerId = event.getPointerId(actionIndex);
                 mStartPoint.set(event.getX(), event.getY());
-                mTempPoint = mStartPoint;
+                mTempPoint.set(mStartPoint);
                 if (getScaleType() != ScaleType.MATRIX) {
                     setScaleType(ScaleType.MATRIX);
                     mMatrix.set(getImageMatrix());
@@ -87,9 +97,12 @@ public class MatrixImageView extends AppCompatImageView {
                 mFingerDistance = calculateFingerDistance(event);
                 break;
             case MotionEvent.ACTION_POINTER_UP:
-                int pointerUpId = event.getPointerId(actionIndex);
+                // 保证多个手指抬起后，sTartPoint  mTempPoint 位置为留着屏幕上那个手指的位置
                 for (int i = 0; i < event.getPointerCount(); i++) {
-                    mStartPoint.set(event.getX(i), event.getY(i));
+                    if (i != actionIndex) {
+                        mStartPoint.set(event.getX(i), event.getY(i));
+                        mTempPoint.set(mStartPoint);
+                    }
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -102,17 +115,22 @@ public class MatrixImageView extends AppCompatImageView {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                mEndPoint.set(event.getX(), event.getY());
+                int pointerId = event.getPointerId(actionIndex);
+                // 落下和抬起都是同一个手指 && 没有执行过拖拽和缩放 && 手指移动距离够小 == 用户点击
+                if (pointerId == mStartPointerId
+                        && mState == STATE_NONE
+                        && calculateMoveDistance(mStartPoint, mEndPoint) <= CLICK_RANGE) {
+                    performClick();
+                }
+                break;
             case MotionEvent.ACTION_CANCEL:
                 mEndPoint.set(event.getX(), event.getY());
                 break;
             default:
                 break;
         }
-        if (calculateMoveDistance(mStartPoint, mEndPoint) <= CLICK_RANGE) {
-            isActionConsume = false;
-            imageClickListener.imageListener(isActionConsume);
-        }
-        return isActionConsume;
+        return true;
     }
 
     /**
@@ -137,6 +155,8 @@ public class MatrixImageView extends AppCompatImageView {
      * 处理缩放
      */
     private void zoom(MotionEvent event) {
+        mState = STATE_ZOOMING;
+
         float endDistance = calculateFingerDistance(event);
         float scale = endDistance / mFingerDistance;
         mFingerDistance = endDistance;
@@ -151,10 +171,15 @@ public class MatrixImageView extends AppCompatImageView {
      * 处理拖拽
      */
     private void drag(MotionEvent event) {
+        // 滑动距离太小，不执行拖拽
+        if (Math.abs(event.getY() - mStartPoint.y) < CLICK_RANGE) {
+            return;
+        }
+        mState = STATE_DRAGING;
+
         float dragX = event.getX() - mTempPoint.x;
         float dragY = event.getY() - mTempPoint.y;
         mTempPoint.set(event.getX(), event.getY());
-
 
         mMatrix.set(getImageMatrix());
         mMatrix.getValues(mMatrixValue);
