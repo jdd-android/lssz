@@ -73,7 +73,7 @@ public class StatusCommentActivity extends Activity {
         new ApiClient().requestSingleStatus(mAccessToken.getToken(), statusId, new Callback<StatusBean, IError>() {
             @Override
             public void success(StatusBean data) {
-                loadStatus(data);
+//                loadStatus(data);
                 Log.i("Callback Success", "SingleStatusCallback Success");
             }
 

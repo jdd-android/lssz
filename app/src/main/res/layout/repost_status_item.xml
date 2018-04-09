@@ -6,6 +6,9 @@
         <variable
             name="status"
             type="com.example.administrator.lssz.beans.StatusBean"/>
+        <variable
+            name="callback"
+            type="com.example.administrator.lssz.common.StatusClickCallback"/>
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
-        android:background="@color/colorffffff">
+        android:background="@color/colorffffff"
+        android:onClick="@{()->callback.onClick(status)}">
 
 
         <ImageView

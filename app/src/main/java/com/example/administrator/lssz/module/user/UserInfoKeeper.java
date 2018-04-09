@@ -1,4 +1,4 @@
-package com.example.administrator.lssz.common;
+package com.example.administrator.lssz.module.user;
 
 import android.content.Context;
 import android.content.SharedPreferences;

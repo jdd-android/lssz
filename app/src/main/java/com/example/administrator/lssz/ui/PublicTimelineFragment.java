@@ -20,6 +20,7 @@ import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
+import com.example.administrator.lssz.common.StatusClickCallback;
 import com.example.administrator.lssz.listener.EndlessRecyclerOnScrollListener;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -58,20 +59,20 @@ public class PublicTimelineFragment extends Fragment {
         mAccessToken = AccessTokenKeeper.readAccessToken(getActivity());
 
         //初始化adapter
-        statusesAdapter = new StatusesAdapter(getActivity());
-        statusesAdapter.setOnRecyclerViewListener(new StatusesAdapter.OnRecyclerViewListener() {
-            @Override
-            public void onItemClick(View view, StatusBean statusBean) {
-                //跳转评论页面
-                String statusBeanString = JSON.toJSONString(statusBean);
-                Intent intent = new Intent(getActivity(), StatusCommentActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(STATUS_ID, statusBean.getId());
-                bundle.putString(STATUS, statusBeanString);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
+        statusesAdapter = new StatusesAdapter(mStatusClickCallback);
+//        statusesAdapter.setOnRecyclerViewListener(new StatusesAdapter.OnRecyclerViewListener() {
+//            @Override
+//            public void onItemClick(View view, StatusBean statusBean) {
+//                //跳转评论页面
+//                String statusBeanString = JSON.toJSONString(statusBean);
+//                Intent intent = new Intent(getActivity(), StatusCommentActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putString(STATUS_ID, statusBean.getId());
+//                bundle.putString(STATUS, statusBeanString);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+//            }
+//        });
 
         //设置RecyclerView
         statusesRecyclerView = (RecyclerView) view.findViewById(R.id.statuses_list);
@@ -111,6 +112,20 @@ public class PublicTimelineFragment extends Fragment {
 
         return view;
     }
+
+
+    private final StatusClickCallback mStatusClickCallback = new StatusClickCallback() {
+        @Override
+        public void onClick(StatusBean status) {
+            String statusBeanString = JSON.toJSONString(status);
+            Intent intent = new Intent(getActivity(), StatusCommentActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(STATUS_ID, status.getId());
+            bundle.putString(STATUS, statusBeanString);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+    };
 
     private void requestPublicTimelineData() {
         new ApiClient().requestPublicLine(mAccessToken.getToken(), new Callback<List<StatusBean>, IError>() {

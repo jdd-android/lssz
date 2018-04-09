@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
+import com.example.administrator.lssz.common.StatusClickCallback;
 import com.example.administrator.lssz.common.utils.DateUtils;
 import com.example.administrator.lssz.common.utils.PicUrlUtils;
 import com.example.administrator.lssz.common.utils.StatusUtils;
@@ -39,7 +41,7 @@ import java.util.List;
  * Created by Administrator on 2018/3/21.
  */
 
-public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //POST_STATUS
     private final int TYPE_ITEM_POST = 0;
@@ -54,11 +56,13 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int loadState = 2;
 
     private List<StatusBean> mStatusesList = new ArrayList<>();
-    private OnRecyclerViewListener onRecyclerViewListener;
-    private Context context;
 
-    public StatusesAdapter(Context context) {
-        this.context = context;
+    @Nullable
+    private StatusClickCallback mStatusClickCallback;
+
+
+    public StatusesAdapter(@Nullable StatusClickCallback statusClickCallback) {
+        mStatusClickCallback = statusClickCallback;
     }
 
     @Override
@@ -77,6 +81,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof StatusViewHolder) {
             StatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
             binding.setStatus(mStatusesList.get(position));
+            binding.setCallback(mStatusClickCallback);
             binding.executePendingBindings();
 //
 //            StatusViewHolder statusViewHolder = (StatusViewHolder) holder;
@@ -109,36 +114,9 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            });
         } else if (holder instanceof RepostStatusViewHolder) {
             RepostStatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
+            binding.setCallback(mStatusClickCallback);
             binding.setStatus(mStatusesList.get(position));
             binding.executePendingBindings();
-//            RepostStatusViewHolder repostStatusViewHolder = (RepostStatusViewHolder) holder;
-//            final StatusBean statusBean = mStatusesList.get(position);
-//            repostStatusViewHolder.itemView.setTag(StatusUtils.getOriginStatus(statusBean));
-//
-//            Glide.with(context).load(statusBean.getUser().getAvatarLarge())
-//                    .apply(RequestOptions.circleCropTransform())
-//                    .into(repostStatusViewHolder.statusUserIamge);
-//            repostStatusViewHolder.statusUserName.setText(statusBean.getUser().getName());
-//            repostStatusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
-//            repostStatusViewHolder.statusText.setText(StatusUtils.getClickableSpan(StatusUtils.getRepostText(statusBean)));
-//            repostStatusViewHolder.statusText.setMovementMethod(LinkMovementMethod.getInstance());
-//            repostStatusViewHolder.originStatusText.setText(StatusUtils.getClickableSpan(StatusUtils.getOriginText(StatusUtils.getOriginStatus(statusBean))));
-//            repostStatusViewHolder.originStatusText.setMovementMethod(LinkMovementMethod.getInstance());
-//
-//            repostStatusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, StatusUtils.getOriginStatus(statusBean).getPicUrlsList()));
-//            repostStatusViewHolder.statusPics.setOnItemClickListerner(new NineGridlayout.OnItemClickListerner() {
-//                @Override
-//                public void onItemClick(View view, int position) {
-////                    Toast.makeText(context, "这是第 " + (position + 1) + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
-//                    CompleteImageDialog myDialog = new CompleteImageDialog(context, PicUrlUtils.getOriginalPic(StatusUtils.getOriginStatus(statusBean).getPicUrlsList().get(position).getThumbnailPic()));
-//                    myDialog.show();
-//                    Window dialogWin = myDialog.getWindow();
-//                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
-//                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//                    dialogWin.setAttributes(lp);
-//                }
-//            });
 
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
@@ -190,19 +168,9 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     static class StatusViewHolder extends RecyclerView.ViewHolder {
-//        ImageView statusUserIamge;
-//        TextView statusUserName;
-//        TextView statusTime;
-//        TextView statusText;
-//        NineGridlayout statusPics;
 
         StatusViewHolder(StatusItemBinding binding) {
             super(binding.getRoot());
-//            statusUserIamge = view.findViewById(R.id.iv_status_image);
-//            statusUserName = view.findViewById(R.id.tv_status_name);
-//            statusTime = view.findViewById(R.id.tv_status_time);
-//            statusText = view.findViewById(R.id.tv_status_text);
-//            statusPics = view.findViewById(R.id.nineGrid_status_pics);
         }
     }
 
@@ -231,18 +199,5 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
-    public void setOnRecyclerViewListener(OnRecyclerViewListener onRecyclerViewListener) {
-        this.onRecyclerViewListener = onRecyclerViewListener;
-    }
 
-    public interface OnRecyclerViewListener {
-        void onItemClick(View view, StatusBean statusBean);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (onRecyclerViewListener != null) {
-            onRecyclerViewListener.onItemClick(v, (StatusBean) v.getTag());
-        }
-    }
 }

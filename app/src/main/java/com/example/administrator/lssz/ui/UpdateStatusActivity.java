@@ -1,13 +1,11 @@
 package com.example.administrator.lssz.ui;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,7 +16,7 @@ import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
-import com.example.administrator.lssz.common.UserInfoKeeper;
+import com.example.administrator.lssz.module.user.UserInfoKeeper;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
