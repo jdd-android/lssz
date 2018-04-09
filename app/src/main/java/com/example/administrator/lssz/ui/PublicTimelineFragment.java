@@ -59,20 +59,7 @@ public class PublicTimelineFragment extends Fragment {
         mAccessToken = AccessTokenKeeper.readAccessToken(getActivity());
 
         //初始化adapter
-        statusesAdapter = new StatusesAdapter(mStatusClickCallback);
-//        statusesAdapter.setOnRecyclerViewListener(new StatusesAdapter.OnRecyclerViewListener() {
-//            @Override
-//            public void onItemClick(View view, StatusBean statusBean) {
-//                //跳转评论页面
-//                String statusBeanString = JSON.toJSONString(statusBean);
-//                Intent intent = new Intent(getActivity(), StatusCommentActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putString(STATUS_ID, statusBean.getId());
-//                bundle.putString(STATUS, statusBeanString);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-//            }
-//        });
+        statusesAdapter = new StatusesAdapter(getContext(),mStatusClickCallback);
 
         //设置RecyclerView
         statusesRecyclerView = (RecyclerView) view.findViewById(R.id.statuses_list);

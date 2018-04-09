@@ -1,38 +1,32 @@
 package com.example.administrator.lssz.adpters;
 
 import android.content.Context;
-import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
-import android.os.AsyncTask;
+
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
+
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.StatusClickCallback;
-import com.example.administrator.lssz.common.utils.DateUtils;
+
 import com.example.administrator.lssz.common.utils.PicUrlUtils;
-import com.example.administrator.lssz.common.utils.StatusUtils;
 import com.example.administrator.lssz.databinding.RepostStatusItemBinding;
 import com.example.administrator.lssz.databinding.StatusItemBinding;
 import com.example.administrator.lssz.dialogs.CompleteImageDialog;
 import com.w4lle.library.NineGridlayout;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +35,7 @@ import java.util.List;
  * Created by Administrator on 2018/3/21.
  */
 
-public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     //POST_STATUS
     private final int TYPE_ITEM_POST = 0;
@@ -57,11 +51,12 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private List<StatusBean> mStatusesList = new ArrayList<>();
 
+    private Context mContext;
     @Nullable
     private StatusClickCallback mStatusClickCallback;
 
-
-    public StatusesAdapter(@Nullable StatusClickCallback statusClickCallback) {
+    public StatusesAdapter(Context context, @Nullable StatusClickCallback statusClickCallback) {
+        mContext=context;
         mStatusClickCallback = statusClickCallback;
     }
 
@@ -77,11 +72,23 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof StatusViewHolder) {
-            StatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
+            final StatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
             binding.setStatus(mStatusesList.get(position));
             binding.setCallback(mStatusClickCallback);
+            binding.setListener(new NineGridlayout.OnItemClickListerner() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    CompleteImageDialog myDialog = new CompleteImageDialog(mContext, PicUrlUtils.getOriginalPic(binding.getStatus().getPicUrlsList().get(position).getThumbnailPic()));
+                    myDialog.show();
+                    Window dialogWin = myDialog.getWindow();
+                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    dialogWin.setAttributes(lp);
+                }
+            });
             binding.executePendingBindings();
 //
 //            StatusViewHolder statusViewHolder = (StatusViewHolder) holder;
@@ -113,9 +120,21 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                }
 //            });
         } else if (holder instanceof RepostStatusViewHolder) {
-            RepostStatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
+            final RepostStatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
             binding.setCallback(mStatusClickCallback);
             binding.setStatus(mStatusesList.get(position));
+            binding.setListener(new NineGridlayout.OnItemClickListerner() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    CompleteImageDialog myDialog = new CompleteImageDialog(mContext, PicUrlUtils.getOriginalPic(binding.getStatus().getPicUrlsList().get(position).getThumbnailPic()));
+                    myDialog.show();
+                    Window dialogWin = myDialog.getWindow();
+                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    dialogWin.setAttributes(lp);
+                }
+            });
             binding.executePendingBindings();
 
         } else if (holder instanceof FootViewHolder) {
@@ -198,6 +217,4 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.loadState = loadState;
         notifyDataSetChanged();
     }
-
-
 }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -13,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.PicUrlsBean;
 import com.example.administrator.lssz.common.utils.PicUrlUtils;
+import com.example.administrator.lssz.dialogs.CompleteImageDialog;
 import com.w4lle.library.NineGridAdapter;
 import com.w4lle.library.NineGridlayout;
 

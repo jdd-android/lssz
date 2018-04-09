@@ -59,7 +59,7 @@ public class FriendsTimelineFragment extends Fragment {
         mAccessToken = AccessTokenKeeper.readAccessToken(getActivity());
 
         //初始化adapter
-        statusesAdapter = new StatusesAdapter(mStatusClickCallback);
+        statusesAdapter = new StatusesAdapter(getContext(), mStatusClickCallback);
 //        statusesAdapter.setOnRecyclerViewListener(new StatusesAdapter.OnRecyclerViewListener() {
 //            @Override
 //            public void onItemClick(View view, StatusBean statusBean) {
@@ -104,7 +104,7 @@ public class FriendsTimelineFragment extends Fragment {
         return view;
     }
 
-    private final StatusClickCallback mStatusClickCallback=new StatusClickCallback() {
+    private final StatusClickCallback mStatusClickCallback = new StatusClickCallback() {
         @Override
         public void onClick(StatusBean status) {
             //跳转评论页面

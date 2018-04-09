@@ -1,4 +1,6 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,10 +14,14 @@
 
         <variable
             name="callback"
-            type="com.example.administrator.lssz.common.StatusClickCallback"/>
+            type="com.example.administrator.lssz.common.StatusClickCallback" />
+
+        <variable
+            name="listener"
+            type="com.w4lle.library.NineGridlayout.OnItemClickListerner" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -73,6 +79,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            app:onItemClickListener="@{listener}"
             app:picUrls="@{status.getPicUrlsList}" />
 
 

@@ -28,4 +28,8 @@ public class BindingAdapters {
     public static void loadNineGrid(NineGridlayout statusPics, List<PicUrlsBean> picUrls){
         statusPics.setAdapter(new ImageLoadAdapter(statusPics.getContext(),picUrls));
     }
+    @BindingAdapter({"onItemClickListener"})
+    public static void setOnItemClickListener(NineGridlayout nineGridlayout, NineGridlayout.OnItemClickListerner listerner){
+        nineGridlayout.setOnItemClickListerner(listerner);
+    }
 }
