@@ -11,8 +11,8 @@ import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.UserBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
+import com.example.administrator.lssz.module.home.HomeActivity;
 import com.example.administrator.lssz.module.user.UserInfoKeeper;
-import com.example.administrator.lssz.ui.HomeActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WbAuthListener;
@@ -38,7 +38,6 @@ public class WBDemoMainActivity extends Activity {
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
         if (mAccessToken.isSessionValid()) {
             updateTokenView(true);
-
         } else {
             auth2AllInOne();
         }
@@ -68,7 +67,6 @@ public class WBDemoMainActivity extends Activity {
             message = getString(R.string.weibosdk_demo_token_has_existed) + "\n" + message;
         }
         tvShowToken.setText(message);
-
     }
 
     private void auth2AllInOne() {
@@ -83,24 +81,19 @@ public class WBDemoMainActivity extends Activity {
                             updateTokenView(false);
                             AccessTokenKeeper.writeAccessToken(WBDemoMainActivity.this, mAccessToken);
                             Toast.makeText(WBDemoMainActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
-
                         }
-
                     }
                 });
-
             }
 
             @Override
             public void cancel() {
                 Toast.makeText(WBDemoMainActivity.this, "取消授权", Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
             public void onFailure(WbConnectErrorMessage wbConnectErrorMessage) {
                 Toast.makeText(WBDemoMainActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -119,6 +112,4 @@ public class WBDemoMainActivity extends Activity {
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
     }
-
-
 }

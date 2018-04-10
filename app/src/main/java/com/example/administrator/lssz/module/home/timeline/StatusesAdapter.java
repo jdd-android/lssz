@@ -1,16 +1,12 @@
-package com.example.administrator.lssz.adpters;
+package com.example.administrator.lssz.module.home.timeline;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-
 import android.support.annotation.Nullable;
-
 import android.support.v7.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -20,13 +16,11 @@ import android.widget.TextView;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.StatusClickCallback;
-
 import com.example.administrator.lssz.common.utils.PicUrlUtils;
 import com.example.administrator.lssz.databinding.RepostStatusItemBinding;
 import com.example.administrator.lssz.databinding.StatusItemBinding;
 import com.example.administrator.lssz.dialogs.CompleteImageDialog;
 import com.w4lle.library.NineGridlayout;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,35 +84,6 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
             binding.executePendingBindings();
-//
-//            StatusViewHolder statusViewHolder = (StatusViewHolder) holder;
-//            final StatusBean statusBean = mStatusesList.get(position);
-//            //给微博状态视图设置tag，传入当前statusBean
-//            statusViewHolder.itemView.setTag(statusBean);
-//
-//            Glide.with(context).load(statusBean.getUser().getAvatarLarge())
-//                    .apply(RequestOptions.circleCropTransform())
-//                    .into(statusViewHolder.statusUserIamge);
-//            statusViewHolder.statusUserName.setText(statusBean.getUser().getName());
-//            statusViewHolder.statusTime.setText(DateUtils.readableDate(statusBean.getCreatedAt()));
-//            statusViewHolder.statusText.setText(StatusUtils.getClickableSpan(statusBean.getText()));
-//            statusViewHolder.statusText.setMovementMethod(LinkMovementMethod.getInstance());
-//
-//            //加载图片，设置图片点击监听
-//            statusViewHolder.statusPics.setAdapter(new ImageLoadAdapter(context, statusBean.getPicUrlsList()));
-//            statusViewHolder.statusPics.setOnItemClickListerner(new NineGridlayout.OnItemClickListerner() {
-//                @Override
-//                public void onItemClick(View view, int position) {
-////                    Toast.makeText(context, "这是第 " + (position + 1) + " 张图，url为 " + statusBean.getPicUrlsList().get(position).getThumbnailPic(), Toast.LENGTH_SHORT).show();
-//                    CompleteImageDialog myDialog = new CompleteImageDialog(context, PicUrlUtils.getOriginalPic(statusBean.getPicUrlsList().get(position).getThumbnailPic()));
-//                    myDialog.show();
-//                    Window dialogWin = myDialog.getWindow();
-//                    WindowManager.LayoutParams lp = dialogWin.getAttributes();
-//                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//                    dialogWin.setAttributes(lp);
-//                }
-//            });
         } else if (holder instanceof RepostStatusViewHolder) {
             final RepostStatusItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
             binding.setCallback(mStatusClickCallback);

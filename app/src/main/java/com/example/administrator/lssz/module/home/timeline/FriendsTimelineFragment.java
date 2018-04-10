@@ -1,4 +1,4 @@
-package com.example.administrator.lssz.ui;
+package com.example.administrator.lssz.module.home.timeline;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
 import com.example.administrator.lssz.R;
-import com.example.administrator.lssz.adpters.StatusesAdapter;
 import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.StatusClickCallback;
 import com.example.administrator.lssz.listener.EndlessRecyclerOnScrollListener;
+import com.example.administrator.lssz.module.comment.StatusCommentActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 

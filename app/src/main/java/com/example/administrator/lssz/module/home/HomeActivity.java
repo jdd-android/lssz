@@ -1,12 +1,11 @@
-package com.example.administrator.lssz.ui;
+package com.example.administrator.lssz.module.home;
 
 import android.content.Intent;
-import android.support.annotation.IdRes;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
-
 
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.api.ApiClient;

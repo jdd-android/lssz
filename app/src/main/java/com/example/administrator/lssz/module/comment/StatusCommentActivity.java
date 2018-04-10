@@ -1,4 +1,4 @@
-package com.example.administrator.lssz.ui;
+package com.example.administrator.lssz.module.comment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.administrator.lssz.R;
-import com.example.administrator.lssz.adpters.CommentsAdapter;
 import com.example.administrator.lssz.adpters.ImageLoadAdapter;
 import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.CommentBean;
@@ -23,9 +22,7 @@ import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.utils.DateUtils;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-import com.w4lle.library.NineGridAdapter;
 import com.w4lle.library.NineGridlayout;
-
 
 import java.util.List;
 

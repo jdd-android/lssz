@@ -1,4 +1,4 @@
-package com.example.administrator.lssz.ui;
+package com.example.administrator.lssz.module.home;
 
 
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.administrator.lssz.R;
+import com.example.administrator.lssz.module.home.timeline.FriendsTimelineFragment;
+import com.example.administrator.lssz.module.home.timeline.PublicTimelineFragment;
 
 /**
  * Created by Administrator on 2018/3/27.

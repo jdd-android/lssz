@@ -24,9 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.StatusCommentActivity" />
-        <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ui.UpdateStatusActivity"></activity>
+        <activity android:name=".module.home.HomeActivity"/>
+        <activity android:name=".module.comment.StatusCommentActivity"/>
+        <activity android:name=".module.home.UpdateStatusActivity"/>
     </application>
 
 </manifest>

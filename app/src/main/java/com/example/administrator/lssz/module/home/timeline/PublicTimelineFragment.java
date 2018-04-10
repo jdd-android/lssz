@@ -1,4 +1,4 @@
-package com.example.administrator.lssz.ui;
+package com.example.administrator.lssz.module.home.timeline;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,15 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
-import com.example.administrator.lssz.LsszApp;
 import com.example.administrator.lssz.R;
-import com.example.administrator.lssz.adpters.StatusesAdapter;
 import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.StatusClickCallback;
 import com.example.administrator.lssz.listener.EndlessRecyclerOnScrollListener;
+import com.example.administrator.lssz.module.comment.StatusCommentActivity;
+import com.example.administrator.lssz.views.LoadMoreRecyclerView;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
@@ -41,7 +41,7 @@ public class PublicTimelineFragment extends Fragment {
     private StatusesAdapter statusesAdapter;
     private SwipeRefreshLayout mRefrshLayout;
     private SwipeRefreshLayout.OnRefreshListener mRefreshListener;
-    private RecyclerView statusesRecyclerView;
+    private LoadMoreRecyclerView statusesRecyclerView;
     private static Oauth2AccessToken mAccessToken;
     private List<StatusBean> totalStatuses = new ArrayList<>();
     private List<StatusBean> pageStatuses = new ArrayList<>();
@@ -62,7 +62,7 @@ public class PublicTimelineFragment extends Fragment {
         statusesAdapter = new StatusesAdapter(getContext(),mStatusClickCallback);
 
         //设置RecyclerView
-        statusesRecyclerView = (RecyclerView) view.findViewById(R.id.statuses_list);
+        statusesRecyclerView = (LoadMoreRecyclerView) view.findViewById(R.id.statuses_list);
         statusesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         statusesRecyclerView.setAdapter(statusesAdapter);
 
@@ -78,9 +78,9 @@ public class PublicTimelineFragment extends Fragment {
         mRefrshLayout.setOnRefreshListener(mRefreshListener);
 
         //上滑加载
-        statusesRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+        statusesRecyclerView.setPullActionListener(new LoadMoreRecyclerView.PullActionListener() {
             @Override
-            public void onLoadMore() {
+            public void onPullUpLoadMore() {
                 statusesAdapter.setLoadState(statusesAdapter.LOADING);
                 if (pageStatuses.size() < totalStatuses.size()) {
                     loadPublicTimeline(getPageStatuses());
@@ -89,6 +89,17 @@ public class PublicTimelineFragment extends Fragment {
                 }
             }
         });
+//        statusesRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+//            @Override
+//            public void onLoadMore() {
+//                statusesAdapter.setLoadState(statusesAdapter.LOADING);
+//                if (pageStatuses.size() < totalStatuses.size()) {
+//                    loadPublicTimeline(getPageStatuses());
+//                } else {
+//                    statusesAdapter.setLoadState(statusesAdapter.LOADING_END);
+//                }
+//            }
+//        });
 
         // 显示
         if (totalStatuses.isEmpty()) {

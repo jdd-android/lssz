@@ -1,4 +1,4 @@
-package com.example.administrator.lssz.ui;
+package com.example.administrator.lssz.module.home;
 
 import android.app.Activity;
 import android.os.Bundle;
