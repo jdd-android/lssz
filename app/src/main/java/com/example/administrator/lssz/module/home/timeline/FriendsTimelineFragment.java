@@ -60,21 +60,6 @@ public class FriendsTimelineFragment extends Fragment {
 
         //初始化adapter
         statusesAdapter = new StatusesAdapter(getContext(), mStatusClickCallback);
-//        statusesAdapter.setOnRecyclerViewListener(new StatusesAdapter.OnRecyclerViewListener() {
-//            @Override
-//            public void onItemClick(View view, StatusBean statusBean) {
-//                //跳转评论页面
-//                String statusBeanString = JSON.toJSONString(statusBean);
-//                Intent intent = new Intent(getActivity(), StatusCommentActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putString(STATUS_ID, statusBean.getId());
-//                bundle.putString(STATUS, statusBeanString);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
-//            }
-//        });
-
-        //设置RecyclerView
         statusesRecyclerView = (RecyclerView) view.findViewById(R.id.statuses_list);
         statusesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         statusesRecyclerView.setAdapter(statusesAdapter);

@@ -3,6 +3,7 @@ package com.example.administrator.lssz.module.home.timeline;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by Administrator on 2018/3/21.
  */
 
-public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     //POST_STATUS
     private final int TYPE_ITEM_POST = 0;
@@ -50,7 +51,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private StatusClickCallback mStatusClickCallback;
 
     public StatusesAdapter(Context context, @Nullable StatusClickCallback statusClickCallback) {
-        mContext=context;
+        mContext = context;
         mStatusClickCallback = statusClickCallback;
     }
 
@@ -148,7 +149,36 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void setStatusesList(final List<StatusBean> statusesList) {
-        mStatusesList = statusesList;
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return mStatusesList.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return statusesList.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                StatusBean oldStatus = mStatusesList.get(oldItemPosition);
+                StatusBean newStatus = statusesList.get(newItemPosition);
+                return oldStatus.getId() == newStatus.getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                StatusBean oldStatus = mStatusesList.get(oldItemPosition);
+                StatusBean newStatus = statusesList.get(newItemPosition);
+                return oldStatus.getId() == newStatus.getId() && oldStatus.getText() == newStatus.getText();
+            }
+        });
+        if (!mStatusesList.isEmpty()) {
+            mStatusesList.clear();
+        }
+        mStatusesList.addAll(statusesList);
+        result.dispatchUpdatesTo(this);
     }
 
     static class StatusViewHolder extends RecyclerView.ViewHolder {
