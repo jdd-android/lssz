@@ -85,13 +85,13 @@ public class HomeActivity extends FragmentActivity {
     };
 
     private void setDefaultFragment() {
-//        mWeiboFragment = new WeiboFragment();
-//        mFragmentManager.beginTransaction().add(R.id.home_content, mWeiboFragment).commit();
-//        setSelectedItem(R.id.home_tv_weibo);
-
-        mPublicTimelineFragment = new PublicTimelineFragment();
-        mFragmentManager.beginTransaction().add(R.id.home_content, mPublicTimelineFragment).commit();
+        mWeiboFragment = new WeiboFragment();
+        mFragmentManager.beginTransaction().add(R.id.home_content, mWeiboFragment).commit();
         setSelectedItem(R.id.home_tv_weibo);
+
+//        mPublicTimelineFragment = new PublicTimelineFragment();
+//        mFragmentManager.beginTransaction().add(R.id.home_content, mPublicTimelineFragment).commit();
+//        setSelectedItem(R.id.home_tv_weibo);
 
 
     }

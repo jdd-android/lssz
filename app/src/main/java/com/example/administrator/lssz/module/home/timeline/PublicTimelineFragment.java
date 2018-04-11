@@ -1,7 +1,6 @@
 package com.example.administrator.lssz.module.home.timeline;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,27 +8,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
 import com.example.administrator.lssz.R;
-import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.StatusBean;
-import com.example.administrator.lssz.common.Callback;
-import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.StatusClickCallback;
-import com.example.administrator.lssz.listener.EndlessRecyclerOnScrollListener;
 import com.example.administrator.lssz.module.comment.StatusCommentActivity;
 import com.example.administrator.lssz.views.LoadMoreRecyclerView;
-import com.sina.weibo.sdk.auth.AccessTokenKeeper;
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,21 +45,21 @@ public class PublicTimelineFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_statuses_timeline, null);
+
         mRefreshLy = rootView.findViewById(R.id.layout_swipe_refresh);
         mRefreshLy.setOnRefreshListener(this);
+
         mAdapter = new StatusesAdapter(getActivity(), this);
+
         mRecyclerView = rootView.findViewById(R.id.statuses_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setPullActionListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        //创建ViewModel
-        mViewModel = ViewModelProviders.of(this).get(PublicTimelineViewModel.class);
-        //监听
-        subscribeUi(mViewModel);
-        //刷新
-        mViewModel.refresh();
 
+        mViewModel = ViewModelProviders.of(this).get(PublicTimelineViewModel.class);
+        subscribeUi(mViewModel);
+        mViewModel.refresh();
 
         return rootView;
     }
@@ -89,19 +78,19 @@ public class PublicTimelineFragment extends Fragment
             @Override
             public void onChanged(@Nullable List<StatusBean> statusBeans) {
                 mAdapter.setStatusesList(statusBeans);
+                mAdapter.notifyDataSetChanged();
             }
         });
 
         //监听是否加载完全
         viewModel.getObservableIsCompleteLoading().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(@Nullable Boolean completeLoading) {
-                if (completeLoading) {
-                    mAdapter.setLoadState(mAdapter.LOADING_COMPLETE);
+            public void onChanged(@Nullable Boolean isCompleteLoading) {
+                if (isCompleteLoading != null && isCompleteLoading) {
+                    mAdapter.setLoadState(mAdapter.LOADING_END);
                 }
             }
         });
-
     }
 
     @Override

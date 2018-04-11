@@ -18,6 +18,7 @@ import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.StatusClickCallback;
 import com.example.administrator.lssz.common.utils.PicUrlUtils;
+import com.example.administrator.lssz.common.utils.StatusUtils;
 import com.example.administrator.lssz.databinding.RepostStatusItemBinding;
 import com.example.administrator.lssz.databinding.StatusItemBinding;
 import com.example.administrator.lssz.dialogs.CompleteImageDialog;
@@ -65,7 +66,20 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return TYPE_ITEM_POST;
         }
     }
-
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_ITEM_POST) {
+            StatusItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.status_item, parent, false);
+            return new StatusViewHolder(binding);
+        } else if (viewType == TYPE_ITEM_REPOST) {
+            RepostStatusItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.repost_status_item, parent, false);
+            return new RepostStatusViewHolder(binding);
+        } else if (viewType == TYPE_FOOTER) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.refresh_footer, parent, false);
+            return new FootViewHolder(view);
+        }
+        return null;
+    }
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof StatusViewHolder) {
@@ -92,7 +106,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             binding.setListener(new NineGridlayout.OnItemClickListerner() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    CompleteImageDialog myDialog = new CompleteImageDialog(mContext, PicUrlUtils.getOriginalPic(binding.getStatus().getPicUrlsList().get(position).getThumbnailPic()));
+                    CompleteImageDialog myDialog = new CompleteImageDialog(mContext, PicUrlUtils.getOriginalPic(StatusUtils.getOriginStatus(binding.getStatus()).getPicUrlsList().get(position).getThumbnailPic()));
                     myDialog.show();
                     Window dialogWin = myDialog.getWindow();
                     WindowManager.LayoutParams lp = dialogWin.getAttributes();
@@ -133,52 +147,39 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mStatusesList.size() + 1;
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_ITEM_POST) {
-            StatusItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.status_item, parent, false);
-            return new StatusViewHolder(binding);
-        } else if (viewType == TYPE_ITEM_REPOST) {
-            RepostStatusItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.repost_status_item, parent, false);
-            return new RepostStatusViewHolder(binding);
-        } else if (viewType == TYPE_FOOTER) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.refresh_footer, parent, false);
-            return new FootViewHolder(view);
-        }
-        return null;
-    }
 
     public void setStatusesList(final List<StatusBean> statusesList) {
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-            @Override
-            public int getOldListSize() {
-                return mStatusesList.size();
-            }
-
-            @Override
-            public int getNewListSize() {
-                return statusesList.size();
-            }
-
-            @Override
-            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                StatusBean oldStatus = mStatusesList.get(oldItemPosition);
-                StatusBean newStatus = statusesList.get(newItemPosition);
-                return oldStatus.getId() == newStatus.getId();
-            }
-
-            @Override
-            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                StatusBean oldStatus = mStatusesList.get(oldItemPosition);
-                StatusBean newStatus = statusesList.get(newItemPosition);
-                return oldStatus.getId() == newStatus.getId() && oldStatus.getText() == newStatus.getText();
-            }
-        });
-        if (!mStatusesList.isEmpty()) {
-            mStatusesList.clear();
-        }
-        mStatusesList.addAll(statusesList);
-        result.dispatchUpdatesTo(this);
+//        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+//            @Override
+//            public int getOldListSize() {
+//                return mStatusesList.size();
+//            }
+//
+//            @Override
+//            public int getNewListSize() {
+//                return statusesList.size();
+//            }
+//
+//            @Override
+//            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+//                StatusBean oldStatus = mStatusesList.get(oldItemPosition);
+//                StatusBean newStatus = statusesList.get(newItemPosition);
+//                return oldStatus.getId().equals( newStatus.getId());
+//            }
+//
+//            @Override
+//            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+//                StatusBean oldStatus = mStatusesList.get(oldItemPosition);
+//                StatusBean newStatus = statusesList.get(newItemPosition);
+//                return oldStatus.getId().equals(newStatus.getId())&& oldStatus.getText().equals(newStatus.getText());
+//            }
+//        });
+//        if (!mStatusesList.isEmpty()) {
+//            mStatusesList.clear();
+//        }
+//        mStatusesList.addAll(statusesList);
+//        result.dispatchUpdatesTo(this);
+        mStatusesList=statusesList;
     }
 
     static class StatusViewHolder extends RecyclerView.ViewHolder {
@@ -208,8 +209,23 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public void setLoadState(int loadState) {
+    public  void setLoadState(int loadState) {
         this.loadState = loadState;
         notifyDataSetChanged();
     }
+
+//    NineGridlayout.OnItemClickListerner mOnItemClickListerner=new NineGridlayout.OnItemClickListerner() {
+//        @Override
+//        public void onItemClick(View view, int position) {
+//            CompleteImageDialog myDialog = new CompleteImageDialog(mContext, PicUrlUtils.getOriginalPic(StatusUtils.getOriginStatus(view.binding.getStatus()).getPicUrlsList().get(position).getThumbnailPic()));
+//            myDialog.show();
+//            Window dialogWin = myDialog.getWindow();
+//            WindowManager.LayoutParams lp = dialogWin.getAttributes();
+//            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//            dialogWin.setAttributes(lp);
+//        }
+//    };
+//
+
 }

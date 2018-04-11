@@ -1,49 +1,40 @@
 package com.example.administrator.lssz.module.home.timeline;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
 import com.example.administrator.lssz.R;
-import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.StatusBean;
-import com.example.administrator.lssz.common.Callback;
-import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.StatusClickCallback;
-import com.example.administrator.lssz.listener.EndlessRecyclerOnScrollListener;
 import com.example.administrator.lssz.module.comment.StatusCommentActivity;
-import com.sina.weibo.sdk.auth.AccessTokenKeeper;
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.example.administrator.lssz.views.LoadMoreRecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2018/3/27.
  */
 
-public class FriendsTimelineFragment extends Fragment {
+public class FriendsTimelineFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoadMoreRecyclerView.PullActionListener, StatusClickCallback {
+
     private final static String STATUS_ID = "id";
     private final static String STATUS = "status";
-    private final int PAGE_NUMBER = 6;
-    private int page = 1;
 
-    private StatusesAdapter statusesAdapter;
-    private SwipeRefreshLayout mRefrshLayout;
-    private SwipeRefreshLayout.OnRefreshListener mRefreshListener;
-    private RecyclerView statusesRecyclerView;
-    private static Oauth2AccessToken mAccessToken;
-    private List<StatusBean> totalStatuses = new ArrayList<>();
-    private List<StatusBean> pageStatuses = new ArrayList<>();
+    private SwipeRefreshLayout mRefreshLy;
+    private LoadMoreRecyclerView mRecyclerView;
+    private StatusesAdapter mAdapter;
+
+    private FriendsTimelineViewModel mViewModel;
 
     public static FriendsTimelineFragment getNewInstance() {
         return new FriendsTimelineFragment();
@@ -53,85 +44,84 @@ public class FriendsTimelineFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_statuses_timeline, null);
+        View rootView = inflater.inflate(R.layout.fragment_statuses_timeline, null);
 
-        //读取令牌
-        mAccessToken = AccessTokenKeeper.readAccessToken(getActivity());
+        mRefreshLy = rootView.findViewById(R.id.layout_swipe_refresh);
+        mRefreshLy.setOnRefreshListener(this);
 
-        //初始化adapter
-        statusesAdapter = new StatusesAdapter(getContext(), mStatusClickCallback);
-        statusesRecyclerView = (RecyclerView) view.findViewById(R.id.statuses_list);
-        statusesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        statusesRecyclerView.setAdapter(statusesAdapter);
+        mAdapter = new StatusesAdapter(getActivity(), this);
 
-        //下拉刷新
-        mRefrshLayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe_refresh);
-        mRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                requestFriendsLineData();
-                mRefrshLayout.setRefreshing(false);
-            }
-        };
-        mRefrshLayout.setOnRefreshListener(mRefreshListener);
+        mRecyclerView = rootView.findViewById(R.id.statuses_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setPullActionListener(this);
+        mRecyclerView.setAdapter(mAdapter);
 
-        //上滑加载
-        statusesRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
-            @Override
-            public void onLoadMore() {
-                requestFriendsLineData();
-            }
-        });
+        mViewModel = ViewModelProviders.of(this).get(FriendsTimelineViewModel.class);
+        subscribeUi(mViewModel);
+        mViewModel.refresh();
 
-        //显示数据
-        requestFriendsLineData();
-
-        return view;
+        return rootView;
     }
 
-    private final StatusClickCallback mStatusClickCallback = new StatusClickCallback() {
-        @Override
-        public void onClick(StatusBean status) {
-            //跳转评论页面
-            String statusBeanString = JSON.toJSONString(status);
-            Intent intent = new Intent(getActivity(), StatusCommentActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(STATUS_ID, status.getId());
-            bundle.putString(STATUS, statusBeanString);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
-    };
-
-    private void requestFriendsLineData() {
-        new ApiClient().requestFriendsLine(mAccessToken.getToken(), page, new Callback<List<StatusBean>, IError>() {
+    private void subscribeUi(FriendsTimelineViewModel viewModel) {
+        //监听加载是否完全
+        viewModel.getObservableIsCompleteLoading().observe(this, new Observer<Boolean>() {
             @Override
-            public void success(List<StatusBean> data) {
-                if (!data.isEmpty()) {
-                    pageStatuses = data;
-                    loadFriendsLine(pageStatuses);
-                    page++;
-                } else {
-                    statusesAdapter.setLoadState(statusesAdapter.LOADING_COMPLETE);
+            public void onChanged(@Nullable Boolean isCompleteLoading) {
+                if (isCompleteLoading != null && isCompleteLoading) {
+                    mAdapter.setLoadState(mAdapter.LOADING_END);
                 }
             }
-
+        });
+        //监听是否刷新
+        viewModel.getObservableIsRefreshing().observe(this, new Observer<Boolean>() {
             @Override
-            public void failure(IError error) {
-                Log.i("Callback Error", "Callback Error");
+            public void onChanged(@Nullable Boolean isRefreshing) {
+                mRefreshLy.setRefreshing(isRefreshing != null && isRefreshing);
+            }
+        });
+        //监听是否加载更多
+        viewModel.getObservableIsLoadingMore().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isLoadingMore) {
+                if (isLoadingMore != null && isLoadingMore) {
+                    mAdapter.setLoadState(mAdapter.LOADING);
+                } else {
+                    mAdapter.setLoadState(mAdapter.LOADING_COMPLETE);
+                }
+            }
+        });
+        //监听列表变化
+        viewModel.getObservableStatusesList().observe(this, new Observer<List<StatusBean>>() {
+            @Override
+            public void onChanged(@Nullable List<StatusBean> statusBeans) {
+                mAdapter.setStatusesList(statusBeans);
+                mAdapter.notifyDataSetChanged();
             }
         });
     }
 
-    private void loadFriendsLine(List<StatusBean> data) {
-        totalStatuses.addAll(data);
-        statusesAdapter.setStatusesList(totalStatuses);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                statusesAdapter.setLoadState(statusesAdapter.LOADING_COMPLETE);
-                statusesAdapter.notifyDataSetChanged();
-            }
-        });
+    @Override
+    public void onClick(StatusBean status) {
+        //跳转评论页面
+        String statusBeanString = JSON.toJSONString(status);
+        Intent intent = new Intent(getActivity(), StatusCommentActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(STATUS_ID, status.getId());
+        bundle.putString(STATUS, statusBeanString);
+        intent.putExtras(bundle);
+        startActivity(intent);
+
     }
+
+    @Override
+    public void onPullUpLoadMore() {
+        mViewModel.loadMore();
+    }
+
+    @Override
+    public void onRefresh() {
+        mViewModel.refresh();
+    }
+
 }

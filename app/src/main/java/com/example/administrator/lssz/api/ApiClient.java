@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.lssz.beans.CommentBean;
 import com.example.administrator.lssz.beans.StatusBean;
-import com.example.administrator.lssz.beans.StatusesListBean;
 import com.example.administrator.lssz.beans.UserBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.Error;
@@ -23,14 +22,11 @@ import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
 
 /**
  * @author lc. 2018-03-22 10:12
@@ -83,39 +79,6 @@ public class ApiClient {
                         statuses.add(status);
                     }
                     callback.success(statuses);
-                } else {
-                    Log.i("onResponse Error", "Response Error");
-                }
-
-            }
-        });
-    }
-
-    public void requestPublicLine(String accessToken, final SimpleCallback<Result<StatusesListBean,IError>>callback) {
-        String url = BASE_API_URL + "statuses/public_timeline.json?access_token=" + accessToken;
-        final Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-
-        sClient.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    List<StatusBean> statuses = new ArrayList<>();
-                    String data = response.body().string();
-                    Log.i("Response", data);
-                    JSONObject jsonObject = JSONObject.parseObject(data);
-                    JSONArray jsonArray = jsonObject.getJSONArray("statuses");
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        StatusBean status = JSONObject.parseObject(jsonObject1.toJSONString(), StatusBean.class);
-                        statuses.add(status);
-                    }
                 } else {
                     Log.i("onResponse Error", "Response Error");
                 }
