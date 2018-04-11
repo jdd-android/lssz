@@ -13,6 +13,7 @@ import com.example.administrator.lssz.beans.UserBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.module.home.timeline.PublicTimelineFragment;
+import com.example.administrator.lssz.module.user.AuthManager;
 import com.example.administrator.lssz.module.user.UserInfoKeeper;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -20,7 +21,6 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 public class HomeActivity extends FragmentActivity {
     private FragmentManager mFragmentManager;
     private WeiboFragment mWeiboFragment;
-    private PublicTimelineFragment mPublicTimelineFragment;
     private static Oauth2AccessToken accessToken;
 
 
@@ -28,23 +28,15 @@ public class HomeActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if (!AuthManager.getInstance(this).isAuthSuccess()) {
+            AuthManager.getInstance(this).startAuth(this);
+            return;
+        }
+
         accessToken = AccessTokenKeeper.readAccessToken(HomeActivity.this);
-        loadUserInfo();
         initView();
         setDefaultFragment();
-    }
-
-    private void loadUserInfo() {
-        new ApiClient().requestUsersShow(accessToken.getToken(), accessToken.getUid(), new Callback<UserBean, IError>() {
-            @Override
-            public void success(UserBean data) {
-                UserInfoKeeper.writeUserInfo(HomeActivity.this, data);
-            }
-
-            @Override
-            public void failure(IError error) {
-            }
-        });
     }
 
     private void initView() {
@@ -88,12 +80,6 @@ public class HomeActivity extends FragmentActivity {
         mWeiboFragment = new WeiboFragment();
         mFragmentManager.beginTransaction().add(R.id.home_content, mWeiboFragment).commit();
         setSelectedItem(R.id.home_tv_weibo);
-
-//        mPublicTimelineFragment = new PublicTimelineFragment();
-//        mFragmentManager.beginTransaction().add(R.id.home_content, mPublicTimelineFragment).commit();
-//        setSelectedItem(R.id.home_tv_weibo);
-
-
     }
 
     private void setSelectedItem(@IdRes int viewId) {

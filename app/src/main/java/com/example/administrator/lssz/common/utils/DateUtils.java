@@ -25,10 +25,25 @@ public class DateUtils {
         }
     }
 
-    public static String getNowDate() {
+    public static Date getDateFromLong(long dateOrigin){
+        try{
+            Date date=POST_DATE_FORMAT.parse(String.valueOf(dateOrigin));
+            return date;
+        }catch (ParseException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Boolean isAfterCurrentTime(long dataOrigin){
+        Date getTime=getDateFromLong(dataOrigin);
+        Date nowTime=getNowDate();
+        return getTime.after(nowTime);
+    }
+
+    public static Date getNowDate() {
         Date currentTime = new Date();
-        SimpleDateFormat format = new SimpleDateFormat();
-        return format.format(currentTime);
+        return currentTime;
     }
 
 //    public String getTimeDiffer(String fromDate, String NowDate) {

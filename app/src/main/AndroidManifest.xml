@@ -17,16 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name=".WBDemoMainActivity">
+        <activity android:name=".module.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.home.HomeActivity" />
         <activity android:name=".module.home.UpdateStatusActivity" />
-        <activity android:name=".module.comment.StatusCommentActivity"></activity>
+        <activity android:name=".module.comment.StatusCommentActivity" />
+        <activity android:name=".WeiboAuthActivity"></activity>
     </application>
 
 </manifest>

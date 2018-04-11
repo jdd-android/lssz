@@ -44,15 +44,4 @@ public class CompleteImageDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(dialogView);
     }
-
-    //    public void setUrls(List<PicUrlsBean> picUrls) {
-//        if (mUrls == null) {
-//            mUrls = new ArrayList<>();
-//        } else {
-//            mUrls.clear();
-//        }
-//        for (PicUrlsBean picUrl : picUrls) {
-//            mUrls.add(PicUrlUtils.getOriginalPic(picUrl.getThumbnailPic()));
-//        }
-//    }
 }
