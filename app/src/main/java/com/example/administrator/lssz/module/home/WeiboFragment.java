@@ -37,8 +37,6 @@ public class WeiboFragment extends Fragment {
         mFragmentPagerAdapter = new MyFragmentPagerAdapter(getFragmentManager());
         mViewPager.setAdapter(mFragmentPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.GRAVITY_CENTER);
-
 
         return mRoot;
     }
