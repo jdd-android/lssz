@@ -21,7 +21,6 @@ import java.util.List;
 
 public class StatusCommentViewModel extends AndroidViewModel {
 
-    private Oauth2AccessToken accessToken;
     private CommentRepository mRepository;
     private MutableLiveData<List<CommentBean>> mObservableCommentList;
     private MutableLiveData<StatusBean> mObservableStatus;
@@ -30,7 +29,6 @@ public class StatusCommentViewModel extends AndroidViewModel {
     public StatusCommentViewModel(Application application) {
         super(application);
 
-        accessToken = AccessTokenKeeper.readAccessToken(application);
         mRepository = new CommentRepository();
         mObservableCommentList = new MutableLiveData<>();
         mObservableStatus = new MutableLiveData<>();
@@ -52,6 +50,7 @@ public class StatusCommentViewModel extends AndroidViewModel {
     }
 
     void loadComment() {
+        Oauth2AccessToken accessToken=AccessTokenKeeper.readAccessToken(this.getApplication());
         StatusBean value = mObservableStatus.getValue();
         if (value == null) {
             mObservableError.setValue(new Error(-1, "获取微博信息失败"));
@@ -77,5 +76,4 @@ public class StatusCommentViewModel extends AndroidViewModel {
     void setObservableStatus(StatusBean status) {
         mObservableStatus.setValue(status);
     }
-
 }

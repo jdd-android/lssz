@@ -22,8 +22,6 @@ public class FriendsTimelineViewModel extends AndroidViewModel {
 
     private int mCurrentPage;
 
-    private Oauth2AccessToken accessToken;
-
     private TimelineRepository mRepository;
     private MutableLiveData<Boolean> mObservableIsRefreshing;
     private MutableLiveData<Boolean> mObservableIsCompleteLoading;
@@ -33,8 +31,6 @@ public class FriendsTimelineViewModel extends AndroidViewModel {
 
     public FriendsTimelineViewModel(Application application) {
         super(application);
-
-        accessToken = AccessTokenKeeper.readAccessToken(application);
 
         mRepository = new TimelineRepository();
         mObservableIsRefreshing = new MutableLiveData<>();
@@ -69,6 +65,7 @@ public class FriendsTimelineViewModel extends AndroidViewModel {
     }
 
     void refresh() {
+        Oauth2AccessToken accessToken=AccessTokenKeeper.readAccessToken(this.getApplication());
         mCurrentPage = 1;
         mObservableIsRefreshing.setValue(true);
         mObservableIsCompleteLoading.setValue(false);
@@ -93,6 +90,7 @@ public class FriendsTimelineViewModel extends AndroidViewModel {
     }
 
     void loadMore() {
+        Oauth2AccessToken accessToken=AccessTokenKeeper.readAccessToken(this.getApplication());
         mObservableIsLoadingMore.setValue(true);
         mRepository.requestfFriendTimelieData(accessToken.getToken(), mCurrentPage, new Callback<List<StatusBean>, IError>() {
             @Override

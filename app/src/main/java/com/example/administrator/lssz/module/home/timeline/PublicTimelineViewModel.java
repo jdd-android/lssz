@@ -21,7 +21,6 @@ public class PublicTimelineViewModel extends AndroidViewModel {
 
     private TimelineRepository mRepository;
 
-    private Oauth2AccessToken accessToken;
     private MutableLiveData<Boolean> mObservableIsRefreshing;
     private MutableLiveData<Boolean> mObservableIsCompleteLoading;
     private MutableLiveData<List<StatusBean>> mObservableStatusesList;
@@ -29,8 +28,6 @@ public class PublicTimelineViewModel extends AndroidViewModel {
 
     public PublicTimelineViewModel(Application application) {
         super(application);
-
-        accessToken = AccessTokenKeeper.readAccessToken(application);
 
         mRepository = new TimelineRepository();
         mObservableIsRefreshing = new MutableLiveData<>();
@@ -59,13 +56,14 @@ public class PublicTimelineViewModel extends AndroidViewModel {
     }
 
     void refresh() {
+        Oauth2AccessToken accessToken=AccessTokenKeeper.readAccessToken(this.getApplication());
         mObservableIsRefreshing.setValue(true);
         mRepository.requestPublicTimelineData(accessToken.getToken(), new Callback<List<StatusBean>, IError>() {
             @Override
             public void success(List<StatusBean> data) {
                 mObservableIsRefreshing.postValue(false);
+                mObservableIsCompleteLoading.postValue(true);
                 if (data.isEmpty()) {
-                    mObservableIsCompleteLoading.postValue(true);
                     mObservableError.postValue(new Error(-2,"刷新失败，请求返回为空"));
                 }
                 mObservableStatusesList.postValue(data);
