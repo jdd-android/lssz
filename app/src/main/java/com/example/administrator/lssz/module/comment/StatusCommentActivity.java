@@ -16,11 +16,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.CommentBean;
 import com.example.administrator.lssz.beans.StatusBean;
+import com.example.administrator.lssz.common.IError;
 
 import java.util.List;
 
 public class StatusCommentActivity extends FragmentActivity {
-    private final static String STATUS_ID = "id";
     private final static String STATUS = "status";
 
     private RecyclerView mRecyclerView;
@@ -31,8 +31,6 @@ public class StatusCommentActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_comment);
-        String statusId = this.getIntent().getExtras().getString(STATUS_ID);
-        StatusBean status = JSONObject.parseObject(this.getIntent().getExtras().getString(STATUS), StatusBean.class);
 
         mAdapter = new StatusCommentsAdapter(StatusCommentActivity.this);
 
@@ -41,7 +39,10 @@ public class StatusCommentActivity extends FragmentActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         mViewModel = ViewModelProviders.of(StatusCommentActivity.this).get(StatusCommentViewModel.class);
-        mViewModel.setObservableStatus(status);
+        if(this.getIntent().getExtras()!=null){
+            StatusBean status = JSONObject.parseObject(this.getIntent().getExtras().getString(STATUS), StatusBean.class);
+            mViewModel.setObservableStatus(status);
+        }
         subscribeUi(mViewModel);
         mViewModel.loadComment();
     }
@@ -62,11 +63,11 @@ public class StatusCommentActivity extends FragmentActivity {
             }
         });
 
-        viewModel.getObservableNoComments().observe(this, new Observer<Boolean>() {
+        viewModel.getObservableError().observe(this, new Observer<IError>() {
             @Override
-            public void onChanged(@Nullable Boolean noComments) {
-                if (noComments != null && noComments) {
-                    Toast.makeText(StatusCommentActivity.this, "No Comment or Comment can't see", Toast.LENGTH_SHORT).show();
+            public void onChanged(@Nullable IError iError) {
+                if(iError!=null){
+                    Toast.makeText(StatusCommentActivity.this, iError.msg(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

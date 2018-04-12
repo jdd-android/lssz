@@ -78,9 +78,7 @@ public class ApiClient {
                     callback.success(statuses);
                 } else {
                     // FIXME 请求失败了也要把错误的信息回传给接口调用方
-                    // 既然向外暴露接口就要保证接口是可信的，既然给出回调参数，就要保证在所有情况下都能将结果回传
-                    // 如果请求时弹出一个 loading dialog，请求失败了，难道让 dialog 一直显示么
-                    Log.i("onResponse Error", "Response Error");
+                    callback.failure(new Error(-2,response.message()));
                 }
 
             }
@@ -121,7 +119,7 @@ public class ApiClient {
                     }
                     callback.success(statuses);
                 } else {
-                    Log.i("onResponse Error", "Response Error");
+                    callback.failure(new Error(-2,response.message()));
                 }
 
             }
@@ -146,7 +144,6 @@ public class ApiClient {
             @Override
             public void onFailure(Call call, IOException e) {
                 callback.failure(new Error(-1, e.getMessage()));
-                Log.i("Request", "Fail");
             }
 
             @Override
@@ -155,7 +152,7 @@ public class ApiClient {
                     UserBean user = JSONObject.parseObject(response.body().string(), UserBean.class);
                     callback.success(user);
                 } else {
-                    Log.i("Response", "error");
+                    callback.failure(new Error(-2,response.message()));
                 }
             }
         });
@@ -167,7 +164,7 @@ public class ApiClient {
      * @param accessToken 授权令牌
      * @param id          微博id
      */
-    public void requestStatusComment(String accessToken, String id, final Callback<List<CommentBean>, IError> callBack) {
+    public void requestStatusComment(String accessToken, String id, final Callback<List<CommentBean>, IError> callback) {
         String url = BASE_API_URL + "comments/show.json?access_token=" + accessToken + "&id=" + id;
         final Request request = new Request.Builder()
                 .url(url)
@@ -176,7 +173,7 @@ public class ApiClient {
         sClient.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                callBack.failure(new Error(-1, e.getMessage()));
+                callback.failure(new Error(-1, e.getMessage()));
 
             }
 
@@ -191,9 +188,9 @@ public class ApiClient {
                         CommentBean comment = JSONObject.parseObject(jsonArray.get(i).toString(), CommentBean.class);
                         comments.add(comment);
                     }
-                    callBack.success(comments);
+                    callback.success(comments);
                 } else {
-                    Log.i("Response", "Response Fail");
+                    callback.failure(new Error(-2,response.message()));
                 }
             }
         });
@@ -226,7 +223,7 @@ public class ApiClient {
                     StatusBean statusBean = JSONObject.parseObject(data, StatusBean.class);
                     callback.success(statusBean);
                 } else {
-                    Log.i("SingleStatusResponse", "Response Fail");
+                    callback.failure(new Error(-2,response.message()));
                 }
             }
         });
@@ -264,7 +261,7 @@ public class ApiClient {
                     StatusBean statusBean = JSONObject.parseObject(data, StatusBean.class);
                     callback.success(statusBean);
                 } else {
-                    Log.i("SingleStatusResponse", "Response Fail");
+                    callback.failure(new Error(-2,response.message()));
                 }
 
             }

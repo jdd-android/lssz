@@ -2,6 +2,7 @@ package com.example.administrator.lssz.module.user;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
 import com.example.administrator.lssz.beans.UserBean;
 

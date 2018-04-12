@@ -186,7 +186,8 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // FIXME 个人建议通过 mStatusesList.clear(); mStatusesList.addAll() 的方式
         // FIXME 因为有时候不能保证 statusesList 在外面有没有被持有、数据有没有修改，如果修改之后又没有及时调用 adapter.notifyDataSetChanged() 更新UI，有可能会出现问题
         //
-        mStatusesList = statusesList;
+        mStatusesList.clear();
+        mStatusesList.addAll(statusesList);
     }
 
     static class StatusViewHolder extends RecyclerView.ViewHolder {

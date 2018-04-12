@@ -12,14 +12,13 @@ import java.util.Locale;
  */
 
 public class DateUtils {
-
     private static final SimpleDateFormat POST_DATE_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);
     private static final String MINITE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final String DAY_DATE_FORMAT = "yyyy-MM-dd";
 
     public static String readableDate(String dateOrigin) {
         try {
-            Date date = POST_DATE_FORMAT.parse(dateOrigin);
+            Date date=POST_DATE_FORMAT.parse(dateOrigin);
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(date);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -34,22 +33,21 @@ public class DateUtils {
             return date;
         } catch (ParseException e) {
             e.printStackTrace();
-            // FIXME 当你的函数会返回 null 值时，最好加个 @Nullable 注解，IDE 会在调用该返回值时对没有做非空判断的地方给出警告
             return null;
         }
     }
 
-    public static Boolean isAfterCurrentTime(long dataOrigin) {
-        Date getTime = getDateFromLong(dataOrigin);
-        Date nowTime = getNowDate();
-        // FIXME getTime 有空值危险
-        return getTime.after(nowTime);
-    }
-
-    public static Date getNowDate() {
-        Date currentTime = new Date();
-        return currentTime;
-    }
+//    public static Boolean isAfterCurrentTime(long dataOrigin) {
+//        Date getTime = getDateFromLong(dataOrigin);
+//        Date nowTime = getNowDate();
+//        // FIXME getTime 有空值危险
+//        return getTime.after(nowTime);
+//    }
+//
+//    public static Date getNowDate() {
+//        Date currentTime = new Date();
+//        return currentTime;
+//    }
 
 //    public String getTimeDiffer(String fromDate, String NowDate) {
 //        try {
