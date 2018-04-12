@@ -45,22 +45,21 @@ public class UpdateStatusActivity extends Activity {
 
     public void updateStatus(View view) {
         String status = mEditText.getText().toString();
-        if (!status.isEmpty()) {
-            new ApiClient().postNewStatus(accessToken.getToken(), status, new Callback<StatusBean, IError>() {
-                @Override
-                public void success(StatusBean data) {
-                    finish();
-                }
-
-                @Override
-                public void failure(IError error) {
-
-                }
-            });
-
-        } else {
+        if (status.isEmpty()) {
             Toast.makeText(UpdateStatusActivity.this, "编辑内容不能为空", Toast.LENGTH_SHORT).show();
+            return;
         }
+        new ApiClient().postNewStatus(accessToken.getToken(), status, new Callback<StatusBean, IError>() {
+            @Override
+            public void success(StatusBean data) {
+                finish();
+            }
+
+            @Override
+            public void failure(IError error) {
+
+            }
+        });
     }
 
     class EditTextListener implements TextWatcher {

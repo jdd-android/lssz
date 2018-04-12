@@ -11,13 +11,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
+import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.StatusClickCallback;
+import com.example.administrator.lssz.eventbus.AuthReturnEvent;
 import com.example.administrator.lssz.module.comment.StatusCommentActivity;
 import com.example.administrator.lssz.views.LoadMoreRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -61,7 +68,23 @@ public class PublicTimelineFragment extends Fragment
         subscribeUi(mViewModel);
         mViewModel.refresh();
 
+        EventBus.getDefault().register(this);
+
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAuthCallbackEvent(AuthReturnEvent event) {
+        if (event.isSuccess()) {
+            mViewModel.refresh();
+        }
+
     }
 
     private void subscribeUi(PublicTimelineViewModel viewModel) {
@@ -88,6 +111,15 @@ public class PublicTimelineFragment extends Fragment
             public void onChanged(@Nullable Boolean isCompleteLoading) {
                 if (isCompleteLoading != null && isCompleteLoading) {
                     mAdapter.setLoadState(mAdapter.LOADING_END);
+                }
+            }
+        });
+
+        viewModel.getObservableError().observe(this, new Observer<IError>() {
+            @Override
+            public void onChanged(@Nullable IError iError) {
+                if(iError!=null){
+                    Toast.makeText(getActivity(),iError.msg(),Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData;
 
 import com.example.administrator.lssz.beans.StatusBean;
 import com.example.administrator.lssz.common.Callback;
+import com.example.administrator.lssz.common.Error;
 import com.example.administrator.lssz.common.IError;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -24,6 +25,7 @@ public class PublicTimelineViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> mObservableIsRefreshing;
     private MutableLiveData<Boolean> mObservableIsCompleteLoading;
     private MutableLiveData<List<StatusBean>> mObservableStatusesList;
+    private MutableLiveData<IError> mObservableError;
 
     public PublicTimelineViewModel(Application application) {
         super(application);
@@ -34,6 +36,7 @@ public class PublicTimelineViewModel extends AndroidViewModel {
         mObservableIsRefreshing = new MutableLiveData<>();
         mObservableIsCompleteLoading = new MutableLiveData<>();
         mObservableStatusesList = new MutableLiveData<>();
+        mObservableError=new MutableLiveData<>();
 
         mObservableIsCompleteLoading.setValue(false);
         mObservableIsRefreshing.setValue(false);
@@ -51,20 +54,26 @@ public class PublicTimelineViewModel extends AndroidViewModel {
         return mObservableIsCompleteLoading;
     }
 
+    MutableLiveData<IError> getObservableError(){
+        return mObservableError;
+    }
+
     void refresh() {
         mObservableIsRefreshing.setValue(true);
         mRepository.requestPublicTimelineData(accessToken.getToken(), new Callback<List<StatusBean>, IError>() {
             @Override
             public void success(List<StatusBean> data) {
-                if (!data.isEmpty()) {
-                    mObservableStatusesList.postValue(data);
-                    mObservableIsCompleteLoading.postValue(true);
-                }
                 mObservableIsRefreshing.postValue(false);
+                if (data.isEmpty()) {
+                    mObservableIsCompleteLoading.postValue(true);
+                    mObservableError.postValue(new Error(-2,"刷新失败，请求返回为空"));
+                }
+                mObservableStatusesList.postValue(data);
             }
             @Override
             public void failure(IError error) {
                 mObservableIsRefreshing.postValue(false);
+                mObservableError.postValue(error);
             }
         });
     }

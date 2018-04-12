@@ -8,16 +8,24 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.EventLog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.example.administrator.lssz.R;
 import com.example.administrator.lssz.beans.StatusBean;
+import com.example.administrator.lssz.common.IError;
 import com.example.administrator.lssz.common.StatusClickCallback;
+import com.example.administrator.lssz.eventbus.AuthReturnEvent;
 import com.example.administrator.lssz.module.comment.StatusCommentActivity;
 import com.example.administrator.lssz.views.LoadMoreRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -60,7 +68,22 @@ public class FriendsTimelineFragment extends Fragment implements SwipeRefreshLay
         subscribeUi(mViewModel);
         mViewModel.refresh();
 
+        EventBus.getDefault().register(this);
+
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAuthCallbackEvent(AuthReturnEvent event) {
+        if (event.isSuccess()) {
+            mViewModel.refresh();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
     }
 
     private void subscribeUi(FriendsTimelineViewModel viewModel) {
@@ -97,6 +120,15 @@ public class FriendsTimelineFragment extends Fragment implements SwipeRefreshLay
             public void onChanged(@Nullable List<StatusBean> statusBeans) {
                 mAdapter.setStatusesList(statusBeans);
                 mAdapter.notifyDataSetChanged();
+            }
+        });
+
+        viewModel.getObservableError().observe(this, new Observer<IError>() {
+            @Override
+            public void onChanged(@Nullable IError iError) {
+                if(iError!=null){
+                    Toast.makeText(getActivity(),iError.msg(),Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

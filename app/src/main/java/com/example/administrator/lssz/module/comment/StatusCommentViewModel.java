@@ -27,14 +27,14 @@ public class StatusCommentViewModel extends AndroidViewModel {
     private MutableLiveData<StatusBean> mObservableStatus;
     private MutableLiveData<IError> mObservableError;
 
-   public StatusCommentViewModel(Application application) {
+    public StatusCommentViewModel(Application application) {
         super(application);
 
         accessToken = AccessTokenKeeper.readAccessToken(application);
         mRepository = new CommentRepository();
         mObservableCommentList = new MutableLiveData<>();
         mObservableStatus = new MutableLiveData<>();
-        mObservableError=new MutableLiveData<>();
+        mObservableError = new MutableLiveData<>();
 
     }
 
@@ -47,32 +47,31 @@ public class StatusCommentViewModel extends AndroidViewModel {
     }
 
 
-    MutableLiveData<IError> getObservableError(){
-       return mObservableError;
+    MutableLiveData<IError> getObservableError() {
+        return mObservableError;
     }
 
     void loadComment() {
         StatusBean value = mObservableStatus.getValue();
-        if(value!=null){
-            mRepository.requestCommentData(accessToken.getToken(), value.getId(), new Callback<List<CommentBean>, IError>() {
-                @Override
-                public void success(List<CommentBean> data) {
-                    if (!data.isEmpty()) {
-                        mObservableCommentList.postValue(data);
-                    } else {
-                        mObservableError.setValue(new Error(-1,"没有评论或者作者设置了隐私"));
-                    }
-                }
-
-                @Override
-                public void failure(IError error) {
-                    mObservableError.postValue(error);
-
-                }
-            });
-        }else{
-            mObservableError.setValue(new Error(-1,"获取微博信息失败"));
+        if (value == null) {
+            mObservableError.setValue(new Error(-1, "获取微博信息失败"));
+            return;
         }
+        mRepository.requestCommentData(accessToken.getToken(), value.getId(), new Callback<List<CommentBean>, IError>() {
+            @Override
+            public void success(List<CommentBean> data) {
+                if (data.isEmpty()) {
+                    mObservableError.postValue(new Error(-1, "没有评论或者作者设置了隐私"));
+                    return;
+                }
+                mObservableCommentList.postValue(data);
+            }
+
+            @Override
+            public void failure(IError error) {
+                mObservableError.postValue(error);
+            }
+        });
     }
 
     void setObservableStatus(StatusBean status) {

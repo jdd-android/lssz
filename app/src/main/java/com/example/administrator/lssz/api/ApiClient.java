@@ -238,7 +238,6 @@ public class ApiClient {
 
     public void postNewStatus(String accessToken, String status, final Callback<StatusBean , IError> callback) {
         String url = BASE_API_URL + "statuses/share.json";
-//        RequestBody requestBody = RequestBody.create(MediaType.parse(status), "status=http://www.sina.com " + status);
         RequestBody formBody = new FormBody.Builder()
                 .add("access_token", accessToken)
                 .add("status", status+"http://www.baidu.com")
