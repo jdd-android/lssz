@@ -87,7 +87,7 @@ public class StatusUtils {
 
     private static ArrayList<Integer> getAtIndex(String str) {
         ArrayList<Integer> atIndexs = new ArrayList<>();
-        String strNew = str.replaceAll("[\\s();,.:\'\"：!]", "*")+"*";
+        String strNew = str.replaceAll("[\\s();,.:\'\"：!]", "*") + "*";
         int start = -1;
         int end = -1;
         do {

@@ -11,14 +11,11 @@ import com.example.administrator.lssz.beans.UserBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.Error;
 import com.example.administrator.lssz.common.IError;
-import com.example.administrator.lssz.common.Result;
-import com.example.administrator.lssz.common.SimpleCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -80,6 +77,9 @@ public class ApiClient {
                     }
                     callback.success(statuses);
                 } else {
+                    // FIXME 请求失败了也要把错误的信息回传给接口调用方
+                    // 既然向外暴露接口就要保证接口是可信的，既然给出回调参数，就要保证在所有情况下都能将结果回传
+                    // 如果请求时弹出一个 loading dialog，请求失败了，难道让 dialog 一直显示么
                     Log.i("onResponse Error", "Response Error");
                 }
 

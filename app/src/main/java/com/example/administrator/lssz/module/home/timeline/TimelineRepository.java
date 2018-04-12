@@ -12,6 +12,8 @@ import java.util.List;
  * Created by Administrator on 2018/4/10.
  */
 
+// FIXME 对于类、函数访问权限，最好是遵循最小知识原则，能用 private 的就不要用 public
+
 public class TimelineRepository {
 
     void requestPublicTimelineData(String accessToken,Callback<List<StatusBean>,IError>callback){

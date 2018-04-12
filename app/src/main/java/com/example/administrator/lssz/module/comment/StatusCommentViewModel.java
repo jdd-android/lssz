@@ -25,7 +25,7 @@ public class StatusCommentViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> mObservableNoComments;
     private MutableLiveData<StatusBean> mObservableStatus;
 
-    StatusCommentViewModel(Application application) {
+   public StatusCommentViewModel(Application application) {
         super(application);
 
         accessToken = AccessTokenKeeper.readAccessToken(application);
@@ -50,6 +50,7 @@ public class StatusCommentViewModel extends AndroidViewModel {
     }
 
     void loadComment() {
+       // FIXME mObservableStatus.getValue().getId() 有空值危险，别忽略这些警告
         mRepository.requestCommentData(accessToken.getToken(), mObservableStatus.getValue().getId(), new Callback<List<CommentBean>, IError>() {
             @Override
             public void success(List<CommentBean> data) {

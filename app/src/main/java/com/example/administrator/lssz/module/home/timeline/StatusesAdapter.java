@@ -3,7 +3,6 @@ package com.example.administrator.lssz.module.home.timeline;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +65,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return TYPE_ITEM_POST;
         }
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM_POST) {
@@ -80,6 +80,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         return null;
     }
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof StatusViewHolder) {
@@ -149,6 +150,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     public void setStatusesList(final List<StatusBean> statusesList) {
+        // FIXME 你这货！！！ 修复这个问题的方式就是注释掉 DiffUtil，真想吊死你
 //        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
 //            @Override
 //            public int getOldListSize() {
@@ -179,7 +181,12 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        }
 //        mStatusesList.addAll(statusesList);
 //        result.dispatchUpdatesTo(this);
-        mStatusesList=statusesList;
+
+        // FIXME 对于 Adapter 中数据集合赋值的问题，
+        // FIXME 个人建议通过 mStatusesList.clear(); mStatusesList.addAll() 的方式
+        // FIXME 因为有时候不能保证 statusesList 在外面有没有被持有、数据有没有修改，如果修改之后又没有及时调用 adapter.notifyDataSetChanged() 更新UI，有可能会出现问题
+        //
+        mStatusesList = statusesList;
     }
 
     static class StatusViewHolder extends RecyclerView.ViewHolder {
@@ -209,7 +216,7 @@ public class StatusesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public  void setLoadState(int loadState) {
+    public void setLoadState(int loadState) {
         this.loadState = loadState;
         notifyDataSetChanged();
     }

@@ -71,7 +71,6 @@ public class UpdateStatusActivity extends Activity {
             } else {
                 mBtUpdateStatus.setEnabled(false);
             }
-
         }
 
         @Override

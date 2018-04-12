@@ -1,5 +1,7 @@
 package com.example.administrator.lssz.common.utils;
 
+import android.support.annotation.Nullable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,19 +27,22 @@ public class DateUtils {
         }
     }
 
-    public static Date getDateFromLong(long dateOrigin){
-        try{
-            Date date=POST_DATE_FORMAT.parse(String.valueOf(dateOrigin));
+    @Nullable
+    public static Date getDateFromLong(long dateOrigin) {
+        try {
+            Date date = POST_DATE_FORMAT.parse(String.valueOf(dateOrigin));
             return date;
-        }catch (ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
+            // FIXME 当你的函数会返回 null 值时，最好加个 @Nullable 注解，IDE 会在调用该返回值时对没有做非空判断的地方给出警告
             return null;
         }
     }
 
-    public static Boolean isAfterCurrentTime(long dataOrigin){
-        Date getTime=getDateFromLong(dataOrigin);
-        Date nowTime=getNowDate();
+    public static Boolean isAfterCurrentTime(long dataOrigin) {
+        Date getTime = getDateFromLong(dataOrigin);
+        Date nowTime = getNowDate();
+        // FIXME getTime 有空值危险
         return getTime.after(nowTime);
     }
 
