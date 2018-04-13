@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -22,29 +21,18 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.administrator.lssz.R;
-import com.example.administrator.lssz.beans.UserBean;
 import com.example.administrator.lssz.databinding.NavHeaderMainBinding;
 import com.example.administrator.lssz.eventbus.AuthReturnEvent;
 import com.example.administrator.lssz.eventbus.UserInfoRefreshEvent;
 import com.example.administrator.lssz.module.user.AuthManager;
-import com.example.administrator.lssz.module.user.UserInfoKeeper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Date;
-
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private DrawerLayout drawerLayout;
-    private FloatingActionButton fab;
-    private FragmentManager mFragmentManager;
-    private WeiboFragment mWeiboFragment;
-    private View headerView;
-    private RelativeLayout navHeader;
-    private NavigationView navigationView;
     private NavHeaderMainBinding binding;
 
     @Override
@@ -65,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         //ActionBarDrawerToggle 是DrawerLayout.DrawerListener的实现
         drawerLayout.addDrawerListener(toggle);
@@ -73,23 +61,23 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         //抽屉界面
-        navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //头部视图
-        headerView = navigationView.getHeaderView(0);
-        navHeader = headerView.findViewById(R.id.nav_header);
+        View headerView = navigationView.getHeaderView(0);
+        RelativeLayout navHeader = headerView.findViewById(R.id.nav_header);
         binding = DataBindingUtil.bind(navHeader);
-        binding.setUser(UserInfoKeeper.readUserInfo(this));
+        binding.setUser(AuthManager.getInstance(this).getCurrentUser());
         binding.setOnClickListener(this);
         binding.executePendingBindings();
 
         //主界面
-        mFragmentManager = getSupportFragmentManager();
-        mWeiboFragment = new WeiboFragment();
+        FragmentManager mFragmentManager = getSupportFragmentManager();
+        WeiboFragment mWeiboFragment = new WeiboFragment();
         mFragmentManager.beginTransaction().add(R.id.home_content, mWeiboFragment).commit();
 
-        fab = findViewById(R.id.fab_newState);
+        FloatingActionButton fab = findViewById(R.id.fab_newState);
         fab.setOnClickListener(this);
     }
 
@@ -130,7 +118,7 @@ public class MainActivity extends AppCompatActivity
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserInfoRefreshEvent(UserInfoRefreshEvent event) {
         if (event.isRefreshSuccess()) {
-            binding.setUser(UserInfoKeeper.readUserInfo(this));
+            binding.setUser(AuthManager.getInstance(this).getCurrentUser());
         }
     }
 
@@ -142,7 +130,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        switch (item.getItemId()) {
+            case R.id.logout:
+                AuthManager.getInstance(this).cleanUserInfo();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override

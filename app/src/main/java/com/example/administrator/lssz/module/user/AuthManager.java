@@ -62,6 +62,12 @@ public class AuthManager {
         activity.startActivity(new Intent(activity, WeiboAuthActivity.class));
     }
 
+    public void cleanUserInfo(){
+        AccessTokenKeeper.clear(mContext);
+        UserInfoKeeper.clear(mContext);
+        EventBus.getDefault().post(new UserInfoRefreshEvent(true));
+    }
+
     public void updateAccessToken(Oauth2AccessToken accessToken) {
         AccessTokenKeeper.clear(mContext);
         AccessTokenKeeper.writeAccessToken(mContext, accessToken);
