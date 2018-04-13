@@ -50,7 +50,7 @@ public class UserInfoKeeper {
             user.setFollowersCount(pref.getInt(FOLLOWERS_COUNT,0));
             user.setFriendsCount(pref.getInt(FRIENDS_COUNT,0));
             user.setStatusesCount(pref.getInt(STATUSES_COUNT,0));
-            user.setName(pref.getString(NAME,""));
+            user.setName(pref.getString(NAME,"未登录"));
             user.setAvatarLarge(pref.getString(AVATAR_LARGE,""));
             user.setLocation(pref.getString(LOCATION,""));
             user.setDescription(pref.getString(DESCRIPTION,""));

@@ -35,10 +35,11 @@ public class WeiboAuthActivity extends Activity implements WbAuthListener {
 
     @Override
     public void onSuccess(Oauth2AccessToken oauth2AccessToken) {
-        EventBus.getDefault().post(new AuthReturnEvent(AuthReturnEvent.STATE_SUCCESS));
         //返回AccessToken，然后用AccessToken获取用户信息
         AuthManager.getInstance(this).updateAccessToken(oauth2AccessToken);
         AuthManager.getInstance(this).refreshUserInfo(oauth2AccessToken.getToken(),oauth2AccessToken.getUid());
+
+        EventBus.getDefault().post(new AuthReturnEvent(AuthReturnEvent.STATE_SUCCESS));
 
         finish();
     }

@@ -17,16 +17,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name=".module.home.HomeActivity">
+        <activity android:name=".module.user.WeiboAuthActivity" />
+        <activity android:name=".module.home.UpdateStatusActivity" />
+        <activity android:name=".module.comment.StatusCommentActivity" />
+        <activity
+            android:name=".module.home.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.user.WeiboAuthActivity"/>
-        <activity android:name=".module.home.UpdateStatusActivity" />
-        <activity android:name=".module.comment.StatusCommentActivity" />
     </application>
 
 </manifest>

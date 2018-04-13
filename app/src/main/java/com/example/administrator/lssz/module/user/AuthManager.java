@@ -9,8 +9,11 @@ import com.example.administrator.lssz.api.ApiClient;
 import com.example.administrator.lssz.beans.UserBean;
 import com.example.administrator.lssz.common.Callback;
 import com.example.administrator.lssz.common.IError;
+import com.example.administrator.lssz.eventbus.UserInfoRefreshEvent;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by Administrator on 2018/4/11.
@@ -43,6 +46,10 @@ public class AuthManager {
         return sInstance;
     }
 
+    public UserBean getCurrentUser() {
+        return UserInfoKeeper.readUserInfo(mContext);
+    }
+
     public boolean isAuthSuccess() {
         Oauth2AccessToken accessToken = AccessTokenKeeper.readAccessToken(mContext);
         if (accessToken.isSessionValid()) {
@@ -67,6 +74,7 @@ public class AuthManager {
                 UserInfoKeeper.clear(mContext);
                 UserInfoKeeper.writeUserInfo(mContext, data);
                 mObservableUser.postValue(data);
+                EventBus.getDefault().post(new UserInfoRefreshEvent(true));
             }
 
             @Override
